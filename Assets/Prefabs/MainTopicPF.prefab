@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &100000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400000}
+  - 114: {fileID: 11400000}
+  m_Layer: 0
+  m_Name: MainTopicPF
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &400000
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79068f032d1776743ba304cbc57582c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ID: 
+  BackgroundTexture: {fileID: 0}
+  EnterTime: 1
+  ExitTime: 1
+  StartEnterAnticipation: .5
+  TopMenuTextures:
+  - {fileID: 2800000, guid: 4eb86720fb2a9dd4f9ef239e50ed8511, type: 3}
+  - {fileID: 2800000, guid: a5777fab93d60c54a900ec6fe57bdf54, type: 3}
+  - {fileID: 2800000, guid: 149b648fabd86834ba503422094c33ae, type: 3}
+  - {fileID: 2800000, guid: ed63cfbd41ce1a5498f5e0adeb060ebf, type: 3}
+  - {fileID: 2800000, guid: 6201689f7525ff149bff30ea16899fc8, type: 3}
+  SideMenuBacks:
+  - {fileID: 2800000, guid: 2a775b41791a4514e837ae371b0015ab, type: 3}
+  - {fileID: 2800000, guid: ff6ddae482dcbeb4da51f99f0f58e827, type: 3}
+  SideMenuDot: {fileID: 2800000, guid: a29849746b060da4caf57743e7f3d2d2, type: 3}
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 100000}
+  m_IsPrefabParent: 1
