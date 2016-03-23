@@ -54,6 +54,7 @@ public class Management : MonoBehaviour {
     //end meeting
     private SRGUIContainer EndMeetingCont;
     private SRGUIInput SendToInput;
+    private SRGUICheckButton RememberMeCheck;
     private SRGUIInput SendtitleInput;
     private SRGUIButton SendMeetingButt;
     private SRGUIButton SaveMeetingButt;
@@ -78,7 +79,9 @@ public class Management : MonoBehaviour {
     public Texture2D DotTexture;
     private SRGUIButton SendAllButt;
     public Texture2D SendAllText;
-    
+
+    private const string DEFAULT_MAIL_ADRESS = "DefaultMailAdress";
+
     public Management() {
         Instance = this;
     }
@@ -237,9 +240,16 @@ public class Management : MonoBehaviour {
         SendToInput.SetSize(new Vector2(inputWidth - 10, inputHeight));
         SendToInput.Style = CommonAssetHolder.instance.GetCustomStyle(CommonAssetHolder.FontNameType.ManagementTitle, 20);
         SendToInput.Position = new Vector2(40, 5);
-        SendToInput.Text = "";
+        SendToInput.Text = PlayerPrefs.HasKey(DEFAULT_MAIL_ADRESS)? PlayerPrefs.GetString(DEFAULT_MAIL_ADRESS):"";
         EndMeetingCont.children.Add(GetHintTag(SendToInput, "Send To"));
         EndMeetingCont.children.Add(SendToInput);
+
+        RememberMeCheck = new SRGUICheckButton();
+        RememberMeCheck.Position = new Vector2(192, 36);
+        RememberMeCheck.Scale = new Vector2(0.7f, 0.7f);
+        RememberMeCheck.SetTexture(CommonAssetHolder.instance.CheckBoxTextures);
+        RememberMeCheck.Checked = true;
+        EndMeetingCont.children.Add(RememberMeCheck);
 
 
         SendtitleInput = new SRGUIInput();
@@ -393,6 +403,11 @@ public class Management : MonoBehaviour {
         } else if (caller == LastMeetingsButt) {
             FoldState = (FoldState == 2) ? -1 : 2;
         } else if (caller == SendMeetingButt) {
+            if (RememberMeCheck.Checked) {
+                PlayerPrefs.SetString(DEFAULT_MAIL_ADRESS, SendToInput.Text);
+            } else {
+                PlayerPrefs.SetString(DEFAULT_MAIL_ADRESS, "");
+            }
             StatusMgr.TryToMailStatus(SendToInput.Text, SendtitleInput.Text);
             FoldState = -1;
             UpdateSessionsList(true);

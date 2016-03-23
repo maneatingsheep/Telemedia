@@ -252,12 +252,12 @@ public class PageCarousel : BasePage {
     }
 
     private void PopUpComplete(TweenEvent te) {
-        if (PageMainTopic.FlatTransitionSeq[0] == null) {
-            PageMainTopic.FlatTransitionSeq[0] = Resources.LoadAll<Texture>("media/transitions/t0");
+        for (int i = 0; i < PageMainTopic.FlatTransitionSeq.Length; i++) {
+            if (PageMainTopic.FlatTransitionSeq[i] == null) {
+                PageMainTopic.FlatTransitionSeq[i] = Resources.LoadAll<Texture>("media/transitions/t" + i);
+            }
         }
-        if (PageMainTopic.FlatTransitionSeq[2] == null) {
-            PageMainTopic.FlatTransitionSeq[2] = Resources.LoadAll<Texture>("media/transitions/t2");
-        }
+        
     }
 
     override public void DoExit(string targetID) {
@@ -316,8 +316,9 @@ public class PageCarousel : BasePage {
 
             PageMainTopic.SelectedFlatTransition = carouselItems.IndexOf(target);
              
-            IsTransition3D = (PageMainTopic.SelectedFlatTransition != 2) && (PageMainTopic.SelectedFlatTransition != 0);
+            //IsTransition3D = (PageMainTopic.SelectedFlatTransition != 2) && (PageMainTopic.SelectedFlatTransition != 0);
             //IsTransition3D = (target != carouselItems[2]);
+            IsTransition3D = false;
 
             int index = carouselItems.IndexOf(target);
 
