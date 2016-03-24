@@ -225,7 +225,7 @@ public class PageMainTopic : BasePage {
             unloadFlatTransitionAssets();
 
         } else {
-            FlatTransitionTexture.SetTexture(FlatTransitionSeq[SelectedFlatTransition][0]);
+            //FlatTransitionTexture.SetTexture(FlatTransitionSeq[SelectedFlatTransition][0]);
             FlatTransitionTexture.Enabled = true;
             FlatTransitionTime = 0;
             FlatTransitionFrame = 0;
@@ -251,10 +251,44 @@ public class PageMainTopic : BasePage {
             int frame = Mathf.FloorToInt(FlatTransitionTime * FlatTransitionFPS);
 
             if (frame > FlatTransitionFrame) {
-                if (FlatTransitionFrame < FlatTransitionSeq[SelectedFlatTransition].Length) {
-                    FlatTransitionTexture.SetTexture(FlatTransitionSeq[SelectedFlatTransition][FlatTransitionFrame]);
+                //if (FlatTransitionFrame < FlatTransitionSeq[SelectedFlatTransition].Length) {
+                    //FlatTransitionTexture.SetTexture(FlatTransitionSeq[SelectedFlatTransition][FlatTransitionFrame]);
+
+
+
+                string path = "";
+                switch (SelectedFlatTransition) {
+                    case 0:
+                        path = "media/transitions/t0/Movie_00_(limo.RGB_color.0000)0000";
+                        break;
+                    case 1:
+                        path = "media/transitions/t1/Movie_03_(stamp.RGB_color.0000)0000";
+                        break;
+                    case 2:
+                        path = "media/transitions/t2/Movie_00_(knife.RGB_color.0000)0000";
+                        break;
+                    case 3:
+                        path = "media/transitions/t3/Movie_04_(system.RGB_color.0000)0000";
+                        break;
+                    case 4:
+                        path = "media/transitions/t4/Movie_02_(sofa.RGB_color.0000)0000";
+                        break;
+                    case 5:
+                        path = "media/transitions/t5/Movie_01_(pantone.RGB_color.0000)0000";
+                        break;
+                }
+
+                path += string.Format("{0:D3}", frame);
+
+                print(path);
+
+                Texture LoadedText = Resources.Load<Texture>(path);
+                if (LoadedText != null) { 
+                    FlatTransitionTexture.SetTexture(LoadedText);
+                    
                     FlatTransitionFrame = frame;
                 } else {
+                    Resources.UnloadUnusedAssets();
                     FlatTransitionTexture.Enabled = false;
                     FlatTransitionPlaying = false;
                     unloadFlatTransitionAssets();
