@@ -225,7 +225,7 @@ public class PageMainTopic : BasePage {
             unloadFlatTransitionAssets();
 
         } else {
-            //FlatTransitionTexture.SetTexture(FlatTransitionSeq[SelectedFlatTransition][0]);
+            FlatTransitionTexture.SetTexture(FlatTransitionSeq[SelectedFlatTransition][0]);
             FlatTransitionTexture.Enabled = true;
             FlatTransitionTime = 0;
             FlatTransitionFrame = 0;
@@ -251,12 +251,12 @@ public class PageMainTopic : BasePage {
             int frame = Mathf.FloorToInt(FlatTransitionTime * FlatTransitionFPS);
 
             if (frame > FlatTransitionFrame) {
-                //if (FlatTransitionFrame < FlatTransitionSeq[SelectedFlatTransition].Length) {
-                    //FlatTransitionTexture.SetTexture(FlatTransitionSeq[SelectedFlatTransition][FlatTransitionFrame]);
+                if (FlatTransitionFrame < FlatTransitionSeq[SelectedFlatTransition].Length) {
+                    FlatTransitionTexture.SetTexture(FlatTransitionSeq[SelectedFlatTransition][FlatTransitionFrame]);
 
 
 
-                string path = "";
+                /*string path = "";
                 switch (SelectedFlatTransition) {
                     case 0:
                         path = "media/transitions/t0/Movie_00_(limo.RGB_color.0000)0000";
@@ -284,11 +284,11 @@ public class PageMainTopic : BasePage {
 
                 Texture LoadedText = Resources.Load<Texture>(path);
                 if (LoadedText != null) { 
-                    FlatTransitionTexture.SetTexture(LoadedText);
+                    FlatTransitionTexture.SetTexture(LoadedText);*/
                     
                     FlatTransitionFrame = frame;
                 } else {
-                    Resources.UnloadUnusedAssets();
+                    //Resources.UnloadUnusedAssets();
                     FlatTransitionTexture.Enabled = false;
                     FlatTransitionPlaying = false;
                     unloadFlatTransitionAssets();
