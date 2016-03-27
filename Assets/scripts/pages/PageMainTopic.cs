@@ -49,9 +49,10 @@ public class PageMainTopic : BasePage {
 
         FlatTransitionTexture = new SRGUITexture();
         FlatTransitionTexture.Enabled = false;
-        //FlatTransitionTexture.Position = new Vector2(47, 25);
-        FlatTransitionTexture.Position = new Vector2(47 * 2 + 46, 26 * 2 + 23);
-        FlatTransitionTexture.Scale = new Vector2(2, 2);
+        FlatTransitionTexture.Scale = new Vector2(1.65f, 1.65f);
+        FlatTransitionTexture.Position = new Vector2(295, 110);
+        //FlatTransitionTexture.Position = new Vector2(47 * 2 + 46, 26 * 2 + 23);
+        //FlatTransitionTexture.Scale = new Vector2(2, 2);
         GUIManager.RegisterGUIElement(FlatTransitionTexture, gameObject);
 
         //side menu back
@@ -306,14 +307,14 @@ public class PageMainTopic : BasePage {
     }
 
     private void unloadFlatTransitionAssets() {
-        if (FlatTransitionSeq[SelectedFlatTransition] != null) {
+        /*if (FlatTransitionSeq[SelectedFlatTransition] != null) {
             for (int i = 0; i < FlatTransitionSeq[SelectedFlatTransition].Length; i++) {
                 Resources.UnloadAsset(FlatTransitionSeq[SelectedFlatTransition][i]);
             }
 
             FlatTransitionSeq[SelectedFlatTransition] = null;
 
-        }
+        }*/
     }
 
     override public void DoExit(string targetID) {

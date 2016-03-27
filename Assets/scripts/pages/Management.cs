@@ -2,6 +2,7 @@
 using System.Collections;
 using Holoville.HOTween;
 using System.Collections.Generic;
+using System;
 
 public class Management : MonoBehaviour {
     public static Management Instance;
@@ -25,7 +26,7 @@ public class Management : MonoBehaviour {
     private List<SRGUIInput> MarkedInputs = new List<SRGUIInput>();
     private List<SRGUILabel> MarkedTags = new List<SRGUILabel>();
 
-    public delegate void NavigationCallback(string targetID, Object extraParams, string extraData);
+    public delegate void NavigationCallback(string targetID, UnityEngine.Object extraParams, string extraData);
     public event NavigationCallback OnNavigate;
 
     private SRGUIButton MeetingSummaryButt;
@@ -53,6 +54,7 @@ public class Management : MonoBehaviour {
 
     //end meeting
     private SRGUIContainer EndMeetingCont;
+    private SRGUILabel SendToHint;
     private SRGUIInput SendToInput;
     private SRGUICheckButton RememberMeCheck;
     private SRGUIInput SendtitleInput;
@@ -236,6 +238,14 @@ public class Management : MonoBehaviour {
         endMeetingBackText.SetTexture(MeetingBackText);
         EndMeetingCont.children.Add(endMeetingBackText);
 
+        SendToHint = new SRGUILabel();
+        //SendToHint.SetSize(new Vector2(inputWidth - 10, inputHeight));
+        SendToHint.Style = CommonAssetHolder.instance.GetCustomStyle(CommonAssetHolder.FontNameType.ManagementTitle, 20);
+        SendToHint.Style.normal.textColor = new Color(0.5f, 0.5f, 0.5f);
+        SendToHint.Position = new Vector2(40, 5);
+        SendToHint.Text = "";
+        EndMeetingCont.children.Add(SendToHint);
+
         SendToInput = new SRGUIInput();
         SendToInput.SetSize(new Vector2(inputWidth - 10, inputHeight));
         SendToInput.Style = CommonAssetHolder.instance.GetCustomStyle(CommonAssetHolder.FontNameType.ManagementTitle, 20);
@@ -243,7 +253,7 @@ public class Management : MonoBehaviour {
         SendToInput.Text = PlayerPrefs.HasKey(DEFAULT_MAIL_ADRESS)? PlayerPrefs.GetString(DEFAULT_MAIL_ADRESS):"";
         EndMeetingCont.children.Add(GetHintTag(SendToInput, "Send To"));
         EndMeetingCont.children.Add(SendToInput);
-
+        
         RememberMeCheck = new SRGUICheckButton();
         RememberMeCheck.Position = new Vector2(192, 36);
         RememberMeCheck.Scale = new Vector2(0.7f, 0.7f);
@@ -403,11 +413,9 @@ public class Management : MonoBehaviour {
         } else if (caller == LastMeetingsButt) {
             FoldState = (FoldState == 2) ? -1 : 2;
         } else if (caller == SendMeetingButt) {
-            if (RememberMeCheck.Checked) {
-                PlayerPrefs.SetString(DEFAULT_MAIL_ADRESS, SendToInput.Text);
-            } else {
-                PlayerPrefs.SetString(DEFAULT_MAIL_ADRESS, "");
-            }
+           
+            ProcessEmailAdress();
+
             StatusMgr.TryToMailStatus(SendToInput.Text, SendtitleInput.Text);
             FoldState = -1;
             UpdateSessionsList(true);
@@ -445,6 +453,43 @@ public class Management : MonoBehaviour {
 
     }
 
+    private void ProcessEmailAdress() {
+        
+        if (RememberMeCheck.Checked) {
+            PlayerPrefs.SetString(DEFAULT_MAIL_ADRESS, SendToInput.Text);
+        } else {
+            PlayerPrefs.SetString(DEFAULT_MAIL_ADRESS, "");
+        }
+
+        StringArrJSONWrapper mailsObj;
+
+        if (PlayerPrefs.HasKey("UsedEmails")) {
+            string JSONEmails = PlayerPrefs.GetString("UsedEmails");
+            mailsObj = JsonUtility.FromJson<StringArrJSONWrapper>(JSONEmails);
+
+            int i = 0;
+
+            string processedMail = mailsObj.mails[0];
+            string tobeWrittenMail = "";
+
+            while (i < mailsObj.mails.Length && processedMail != SendToInput.Text.ToLower()) {
+                processedMail = mailsObj.mails[i];
+                mailsObj.mails[i] = tobeWrittenMail;
+                tobeWrittenMail = processedMail;
+                i++;
+            }
+            
+        } else {
+            mailsObj = new StringArrJSONWrapper();
+            mailsObj.mails = new string[20];
+        }
+
+        mailsObj.mails[0] = SendToInput.Text.ToLower();
+        
+        string ToJSONEmails = JsonUtility.ToJson(mailsObj);
+        PlayerPrefs.SetString("UsedEmails", ToJSONEmails);
+    }
+
     private void UpdateSessionsList(bool fromFiles) {
         if (fromFiles) {
             CurrentSessions = StatusMgr.GetFileList();
@@ -478,6 +523,7 @@ public class Management : MonoBehaviour {
     }
 
     void Update() {
+        
         /*if (IsMouseDown) {
             print(Input.GetMouseButton(0));
         }
@@ -492,6 +538,26 @@ public class Management : MonoBehaviour {
             MarkedTags[i].Enabled = MarkedInputs[i].Text.Trim() == "";
         }
 
+        if (SendToInput.IsModified) {
+            UpdateSuggestedEmails();
+        }
+    }
+
+    private void UpdateSuggestedEmails() {
+        if (SendToInput.Text == "") {
+            SendToHint.Text = "";
+        } else {
+            if (PlayerPrefs.HasKey("UsedEmails")) {
+                string JSONEmails = PlayerPrefs.GetString("UsedEmails");
+                StringArrJSONWrapper mailsObj = JsonUtility.FromJson<StringArrJSONWrapper>(JSONEmails);
+                for (int i = 0; i < mailsObj.mails.Length; i++) {
+                    if (mailsObj.mails[i].Contains(SendToInput.Text.ToLower())) {
+                        print(mailsObj.mails[i]);
+                    }
+                }
+            }
+        }
+        
     }
 
     public int FoldState {
@@ -616,5 +682,10 @@ public class Management : MonoBehaviour {
         ClientDetailsPhone.Text = details.PhoneNumber;
         ClientDetailsAircraft.Text = details.AircraftType;
         ClientDetailsNotes.Text = details.Notes;
+    }
+
+    [Serializable]
+    public class StringArrJSONWrapper{
+        public string[] mails;
     }
 }
