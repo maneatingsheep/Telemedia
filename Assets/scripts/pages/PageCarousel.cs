@@ -56,7 +56,7 @@ public class PageCarousel : BasePage {
 
         for (int i = 0; i < PageMainTopic.FlatTransitionSeq.Length; i++) {
             if (PageMainTopic.FlatTransitionSeq[i] == null) {
-                PageMainTopic.FlatTransitionSeq[i] = Resources.LoadAll<Texture>("media/transitions/t" + i);
+                //PageMainTopic.FlatTransitionSeq[i] = Resources.LoadAll<Texture>("media/transitions/t" + i);
             }
 
         }
