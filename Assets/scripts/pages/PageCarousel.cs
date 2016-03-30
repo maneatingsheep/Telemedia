@@ -55,12 +55,12 @@ public class PageCarousel : BasePage {
     override internal void InitPage(XmlNode pageData) {
         base.InitPage(pageData);
 
-        for (int i = 0; i < PageMainTopic.FlatTransitionSeq.Length; i++) {
+        /*for (int i = 0; i < PageMainTopic.FlatTransitionSeq.Length; i++) {
             if (PageMainTopic.FlatTransitionSeq[i] == null) {
                 PageMainTopic.FlatTransitionSeq[i] = Resources.LoadAll<Texture>("media/transitions/t" + i);
             }
 
-        }
+        }*/
 
         ExitTime = 0.8f;
 
@@ -267,12 +267,12 @@ public class PageCarousel : BasePage {
     }
 
     private void PopUpComplete(TweenEvent te) {
-        /*for (int i = 0; i < PageMainTopic.FlatTransitionSeq.Length; i++) {
+        for (int i = 0; i < PageMainTopic.FlatTransitionSeq.Length; i++) {
             if (PageMainTopic.FlatTransitionSeq[i] == null) {
                 PageMainTopic.FlatTransitionSeq[i] = Resources.LoadAll<Texture>("media/transitions/t" + i);
             }
 
-        }*/
+        }
         
     }
 
