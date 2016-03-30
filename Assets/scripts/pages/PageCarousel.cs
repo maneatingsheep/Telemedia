@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Holoville.HOTween;
 using Holoville.HOTween.Plugins;
-using System.Xml; 
+using System.Xml;
+using System;
 
 public class PageCarousel : BasePage {
 
@@ -56,7 +57,7 @@ public class PageCarousel : BasePage {
 
         for (int i = 0; i < PageMainTopic.FlatTransitionSeq.Length; i++) {
             if (PageMainTopic.FlatTransitionSeq[i] == null) {
-                //PageMainTopic.FlatTransitionSeq[i] = Resources.LoadAll<Texture>("media/transitions/t" + i);
+                PageMainTopic.FlatTransitionSeq[i] = Resources.LoadAll<Texture>("media/transitions/t" + i);
             }
 
         }
@@ -87,7 +88,8 @@ public class PageCarousel : BasePage {
         for (int i = 0; i < Destinations.Count; i++) {
             float angRad = Mathf.Deg2Rad * i * (360 / Destinations.Count);
             carouselItems.Add(Instantiate(CarouselPF, rotator.transform.position + new Vector3(radius * Mathf.Cos(angRad), 0, radius * Mathf.Sin(angRad)), new Quaternion()) as GameObject);
-            carouselItems[i].GetComponent<Renderer>().material.mainTexture = ItemTextures[i * 3];
+            SetItemTexture(carouselItems[i], ItemTextures[i * 3]);
+            //rouselItems[i].GetComponent<Renderer>().material.SetTexture("Albedo", ;
             carouselItems[i].transform.parent = rotator.transform;
             
             (carouselItems[i].GetComponent(typeof(CarouselItem)) as CarouselItem).OnTouchStart += ItemTouchStarted;
@@ -155,6 +157,11 @@ public class PageCarousel : BasePage {
 
     }
 
+    private void SetItemTexture(GameObject go, Texture texture) {
+        go.GetComponent<Renderer>().material.SetTexture("_MainTex", texture);
+        //go.GetComponent<Renderer>().material.mainTexture =  texture;
+    }
+
     override protected void DoInternalUpdate() {
         base.DoInternalUpdate();
         //rotator.transform.Rotate(Vector3.up, 10 * Time.deltaTime);
@@ -195,7 +202,7 @@ public class PageCarousel : BasePage {
         SpinSoundOn = false;
     }
 
-    override public void DoEnter(float previousDelay, Object extraParams, string extraData = null) {
+    override public void DoEnter(float previousDelay, UnityEngine.Object extraParams, string extraData = null) {
         base.DoEnter(previousDelay, extraParams, extraData);
         Plane.Enabled = true;
         Logo.Alpha = 0;
@@ -231,7 +238,8 @@ public class PageCarousel : BasePage {
         }
 
         foreach (GameObject caruoselItem in carouselItems) {
-            carouselItems[itemCount].GetComponent<Renderer>().material.mainTexture = ItemTextures[itemCount * 3 + 1];
+            SetItemTexture(carouselItems[itemCount], ItemTextures[itemCount * 3 + 1]);
+            //carouselItems[itemCount].GetComponent<Renderer>().material.mainTexture = ItemTextures[itemCount * 3 + 1];
             
             caruoselItem.transform.localPosition = new Vector3(caruoselItem.transform.localPosition.x, -0.2f, caruoselItem.transform.localPosition.z);
             caruoselItem.transform.localScale = BaseItemScale * 0.3f;
@@ -300,7 +308,8 @@ public class PageCarousel : BasePage {
     private void SetSelectedTexture() {
         int index = carouselItems.IndexOf(SelectedItem);
         if (index > -1) {
-            carouselItems[index].GetComponent<Renderer>().material.mainTexture = ItemTextures[index * 3];
+            SetItemTexture(carouselItems[index], ItemTextures[index * 3]);
+            //carouselItems[index].GetComponent<Renderer>().material.mainTexture = ItemTextures[index * 3];
         }
     }
 
@@ -338,7 +347,8 @@ public class PageCarousel : BasePage {
                 Plane.Enabled = false;
             }
 
-            carouselItems[index].GetComponent<Renderer>().material.mainTexture = ItemTextures[index * 3 + 2];
+            //carouselItems[index].GetComponent<Renderer>().material.mainTexture = ItemTextures[index * 3 + 2];
+            SetItemTexture(carouselItems[index], ItemTextures[index * 3 + 2]);
             SoundController.instance.playSingleSound(SoundController.SoundT.MainMenuSelection);
         }
 
