@@ -570,7 +570,7 @@ public class Management : MonoBehaviour {
                 if (photo != null) {
                     camTexture.SetTexture(photo, new Vector2(300, 200), true);
                 } else {
-                    camTexture.SetTexture(null);
+                    camTexture.SetTexture();
                 }
                 
 

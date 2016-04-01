@@ -2,17 +2,35 @@
 
 public class SRGUITexture : SRBaseGUIElement {
 
-    private Texture _Texture = null;
-    
+    private Texture2D _Texture = null;
+    public bool hasCoords = false;
+    public Rect Coords;
+    public Vector2 Offset;
+
     public void SetTexture(Texture texture) {
-        _Texture = texture;
+        hasCoords = false;
+        _Texture = texture as Texture2D;
         if (texture) {
             _Size = new Vector2(texture.width, texture.height);
         }
     }
 
+    public void SetTexture(Sprite sprite) {
+        hasCoords = true;
+        _Texture = sprite.texture;
+        //Coords = sprite.textureRect;
+        Coords = new Rect(0f, 0f, 1f, 1f);
+        _Size = new Vector2(sprite.rect.width, sprite.rect.height);
+        Offset = new Vector2(sprite.textureRectOffset.x, sprite.textureRectOffset.y) * sprite.pixelsPerUnit;
+    }
+
+    public void SetTexture() {
+        _Texture = null;
+    }
+
     public void SetTexture(Texture texture, Vector2 size, bool fitToSize = false) {
-        _Texture = texture;
+        hasCoords = false;
+        _Texture = texture as Texture2D;
         if (fitToSize) {
             float minRat = Mathf.Min(size.x / texture.width, size.y / texture.height);
             _Size = new Vector2(texture.width * minRat, texture.height * minRat); 

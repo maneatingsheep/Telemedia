@@ -126,7 +126,14 @@ public class SRGUIManager : MonoBehaviour {
                     }
                 } else if (child is SRGUITexture) {
                     SRGUITexture texture = child as SRGUITexture;
-                    GUI.DrawTexture(new Rect(0, 0, texture.Size.x, texture.Size.y), texture.Texture);
+                    if (texture.hasCoords) {
+                        GUI.DrawTextureWithTexCoords(new Rect(texture.Offset.x, texture.Offset.y, texture.Size.x, texture.Size.y), texture.Texture, texture.Coords);
+                        //GUI.DrawTexture(new Rect(0, 0, texture.Size.x, texture.Size.y), texture.Texture);
+                        Debug.Log(texture.Coords.width + " " + texture.Coords.height);
+                    } else {
+                        GUI.DrawTexture(new Rect(0, 0, texture.Size.x, texture.Size.y), texture.Texture);
+                    }
+                    
 
                 } else if (child is SRGUILabel) {
                     SRGUILabel label = child as SRGUILabel;

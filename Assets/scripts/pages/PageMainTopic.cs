@@ -26,7 +26,13 @@ public class PageMainTopic : BasePage {
     private float FlatTransitionTime;
     private int FlatTransitionFrame;
     private const float FlatTransitionFPS = 30;
-    public static Texture[][] FlatTransitionSeq = new Texture[6][];
+    public Texture[] FlatTransitionSeq0;
+    public Texture[] FlatTransitionSeq1;
+    public Texture[] FlatTransitionSeq2;
+    public Texture[] FlatTransitionSeq3;
+    public Texture[] FlatTransitionSeq4;
+    public Texture[] FlatTransitionSeq5;
+    public Texture[][] FlatTransitionSeq;
     private bool FlatTransitionPlaying = false;
     private TransitionData SideMenuTransitionData;
     private Vector3 SelectedItemInPosition;
@@ -201,6 +207,14 @@ public class PageMainTopic : BasePage {
             GUIManager.RegisterGUIElement(SideMenuCont, gameObject);
 
         }
+
+        FlatTransitionSeq = new Texture[6][];
+        FlatTransitionSeq[0] = FlatTransitionSeq0;
+        FlatTransitionSeq[1] = FlatTransitionSeq1;
+        FlatTransitionSeq[2] = FlatTransitionSeq2;
+        FlatTransitionSeq[3] = FlatTransitionSeq3;
+        FlatTransitionSeq[4] = FlatTransitionSeq4;
+        FlatTransitionSeq[5] = FlatTransitionSeq5;
 
     }
 
