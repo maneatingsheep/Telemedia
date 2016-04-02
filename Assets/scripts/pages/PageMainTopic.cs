@@ -26,13 +26,13 @@ public class PageMainTopic : BasePage {
     private float FlatTransitionTime;
     private int FlatTransitionFrame;
     private const float FlatTransitionFPS = 30;
-    public Sprite[] FlatTransitionSeq0;
+    /*public Sprite[] FlatTransitionSeq0;
     public Sprite[] FlatTransitionSeq1;
     public Sprite[] FlatTransitionSeq2;
     public Sprite[] FlatTransitionSeq3;
     public Sprite[] FlatTransitionSeq4;
-    public Sprite[] FlatTransitionSeq5;
-    public Sprite[][] FlatTransitionSeq;
+    public Sprite[] FlatTransitionSeq5;*/
+    public static Sprite[][] FlatTransitionSeq;
     private bool FlatTransitionPlaying = false;
     private TransitionData SideMenuTransitionData;
     private Vector3 SelectedItemInPosition;
@@ -208,13 +208,13 @@ public class PageMainTopic : BasePage {
 
         }
 
-        FlatTransitionSeq = new Sprite[6][];
+        /*FlatTransitionSeq = new Sprite[6][];
         FlatTransitionSeq[0] = FlatTransitionSeq0;
         FlatTransitionSeq[1] = FlatTransitionSeq1;
         FlatTransitionSeq[2] = FlatTransitionSeq2;
         FlatTransitionSeq[3] = FlatTransitionSeq3;
         FlatTransitionSeq[4] = FlatTransitionSeq4;
-        FlatTransitionSeq[5] = FlatTransitionSeq5;
+        FlatTransitionSeq[5] = FlatTransitionSeq5;*/
 
     }
 
