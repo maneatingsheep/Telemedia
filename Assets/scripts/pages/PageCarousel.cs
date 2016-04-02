@@ -157,6 +157,22 @@ public class PageCarousel : BasePage {
 
     }
 
+    public static void LoadTextures() {
+        PageMainTopic.FlatTransitionSeq = new Sprite[6][];
+        for (int i = 0; i < PageMainTopic.FlatTransitionSeq.Length; i++) {
+            if (PageMainTopic.FlatTransitionSeq[i] == null) {
+                PageMainTopic.FlatTransitionSeq[i] = Resources.LoadAll<Sprite>("media/transitions/t" + i + "/packed");
+            }
+
+        }
+    }
+    
+    public static bool CheckTexturesLoaded() {
+        print("3");
+        return (PageMainTopic.FlatTransitionSeq != null) && (PageMainTopic.FlatTransitionSeq[5] != null) && (PageMainTopic.FlatTransitionSeq[5].Length != 0);
+    }
+
+
     private void SetItemTexture(GameObject go, Texture texture) {
         go.GetComponent<Renderer>().material.SetTexture("_MainTex", texture);
         //go.GetComponent<Renderer>().material.mainTexture =  texture;
@@ -267,13 +283,13 @@ public class PageCarousel : BasePage {
     }
 
     private void PopUpComplete(TweenEvent te) {
-        PageMainTopic.FlatTransitionSeq = new Sprite[6][];
+        /*PageMainTopic.FlatTransitionSeq = new Sprite[6][];
         for (int i = 0; i < PageMainTopic.FlatTransitionSeq.Length; i++) {
             if (PageMainTopic.FlatTransitionSeq[i] == null) {
                 PageMainTopic.FlatTransitionSeq[i] = Resources.LoadAll<Sprite>("media/transitions/t" + i + "/packed");
             }
 
-        }
+        }*/
         
     }
 

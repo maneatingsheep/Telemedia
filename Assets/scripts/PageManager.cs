@@ -3,6 +3,7 @@ using System.Collections;
 using System.Xml;
 using System.Collections.Generic;
 using Holoville.HOTween;
+using System;
 
 public class PageManager : MonoBehaviour {
 
@@ -113,11 +114,22 @@ public class PageManager : MonoBehaviour {
         Manage.Init();
         Manage.OnNavigate += DoNavigate;
 
-        DoNavigate("root", null, null);
+
+        StartCoroutine(CheckReadytoNavigate());
+
+        PageCarousel.LoadTextures();
+        
     }
 
+    private IEnumerator CheckReadytoNavigate() {
+        print("1");
+        while (!PageCarousel.CheckTexturesLoaded()) yield return new WaitForSeconds(0.25f);
+        print("2");
+        DoNavigate("root", null, null);
+        
+    }
 
-    private void DoNavigate(string targetID, Object extraParams, string extraData) {
+    private void DoNavigate(string targetID, UnityEngine.Object extraParams, string extraData) {
         if (PagesById.ContainsKey(targetID) || targetID ==  BACK_DESTINATION) {
             if (targetID == BACK_DESTINATION) {
                 NavigationRoute.RemoveAt(NavigationRoute.Count - 1);
