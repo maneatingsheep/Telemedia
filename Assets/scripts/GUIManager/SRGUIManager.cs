@@ -127,9 +127,9 @@ public class SRGUIManager : MonoBehaviour {
                 } else if (child is SRGUITexture) {
                     SRGUITexture texture = child as SRGUITexture;
                     if (texture.hasCoords) {
-                        GUI.DrawTextureWithTexCoords(new Rect(texture.Offset.x, texture.Offset.y, texture.Size.x, texture.Size.y), texture.Texture, texture.Coords);
+                        GUI.DrawTextureWithTexCoords(new Rect(0, 0, texture.Size.x, texture.Size.y), texture.Texture, texture.Coords);
                         //GUI.DrawTexture(new Rect(0, 0, texture.Size.x, texture.Size.y), texture.Texture);
-                        Debug.Log(texture.Coords.width + " " + texture.Coords.height);
+                        Debug.Log(texture.Size.x + " " + texture.Size.y);
                     } else {
                         GUI.DrawTexture(new Rect(0, 0, texture.Size.x, texture.Size.y), texture.Texture);
                     }

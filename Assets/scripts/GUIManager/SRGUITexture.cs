@@ -5,8 +5,7 @@ public class SRGUITexture : SRBaseGUIElement {
     private Texture2D _Texture = null;
     public bool hasCoords = false;
     public Rect Coords;
-    public Vector2 Offset;
-
+    
     public void SetTexture(Texture texture) {
         hasCoords = false;
         _Texture = texture as Texture2D;
@@ -18,10 +17,12 @@ public class SRGUITexture : SRBaseGUIElement {
     public void SetTexture(Sprite sprite) {
         hasCoords = true;
         _Texture = sprite.texture;
-        //Coords = sprite.textureRect;
-        Coords = new Rect(0f, 0f, 1f, 1f);
+        Vector2 scale = new Vector2(sprite.rect.width / sprite.texture.width, 
+            sprite.rect.height/ sprite.texture.height);
+        Vector2 pos = new Vector2(sprite.rect.x / sprite.texture.width,
+            sprite.rect.y / sprite.texture.height);
+        Coords = new Rect(pos.x, pos.y, scale.x, scale.y);
         _Size = new Vector2(sprite.rect.width, sprite.rect.height);
-        Offset = new Vector2(sprite.textureRectOffset.x, sprite.textureRectOffset.y) * sprite.pixelsPerUnit;
     }
 
     public void SetTexture() {
