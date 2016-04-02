@@ -122,12 +122,16 @@ public class PageManager : MonoBehaviour {
     }
 
     private IEnumerator CheckReadytoNavigate() {
-        print("1");
+        
         while (!PageCarousel.CheckTexturesLoaded()) yield return new WaitForSeconds(0.25f);
-        print("2");
-        DoNavigate("root", null, null);
+        Invoke("DelayedFirstNav", 4);
         
     }
+
+    private void DelayedFirstNav() {
+        DoNavigate("root", null, null);
+    }
+
 
     private void DoNavigate(string targetID, UnityEngine.Object extraParams, string extraData) {
         if (PagesById.ContainsKey(targetID) || targetID ==  BACK_DESTINATION) {
