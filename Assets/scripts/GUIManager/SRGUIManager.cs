@@ -29,11 +29,16 @@ public class SRGUIManager : MonoBehaviour {
     private Matrix4x4 MatrixOriginalBackup;
     private float groupScale;
 
+    public bool Enabled = false;
+
     public SRGUIManager() {
         instance = this;
     }
 
     public void Draw(GameObject caller) {
+
+        if (!Enabled) return;
+
 
         groupScale = Screen.height / (float)UiHeight;
         groupScale = Mathf.Min(groupScale, Screen.width / (float)UiWidth);
