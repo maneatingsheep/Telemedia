@@ -9,9 +9,11 @@ using System;
 public class PageCarousel : BasePage {
 
     public GameObject CarouselPF;
+    public GameObject CarouselSpritePF;
     public GameObject BasePF;
 
     public Texture[] ItemTextures;
+    public Sprite[] ItemSprites;
 
     public Texture PlaneTexture;
     public Texture LargeLogoTexture;
@@ -42,7 +44,8 @@ public class PageCarousel : BasePage {
     private Vector3 RootPosition = new Vector3(-0.14f, -0.73f, 7.13f);
     private Vector3 ExitPosition = new Vector3(-6f, -3f, 20.13f);
 
-    private Vector3 BaseItemScale = new Vector3(1.22f, 1f, 1f);
+    //private Vector3 BaseItemScale = new Vector3(1.22f, 1f, 1f) * 0.1f;
+    private Vector3 BaseItemScale = new Vector3(1f, 1f, 1f) * 0.1f;
     SRGUITexture Logo;
 
     private SRGUITexture Plane;
@@ -87,9 +90,10 @@ public class PageCarousel : BasePage {
 
         for (int i = 0; i < Destinations.Count; i++) {
             float angRad = Mathf.Deg2Rad * i * (360 / Destinations.Count);
-            carouselItems.Add(Instantiate(CarouselPF, rotator.transform.position + new Vector3(radius * Mathf.Cos(angRad), 0, radius * Mathf.Sin(angRad)), new Quaternion()) as GameObject);
-            SetItemTexture(carouselItems[i], ItemTextures[i * 3]);
-            //rouselItems[i].GetComponent<Renderer>().material.SetTexture("Albedo", ;
+            carouselItems.Add(Instantiate(CarouselSpritePF, rotator.transform.position + new Vector3(radius * Mathf.Cos(angRad), 0, radius * Mathf.Sin(angRad)), new Quaternion()) as GameObject);
+            //SetItemTexture(carouselItems[i], ItemTextures[i * 3]);
+            SetItemTexture(carouselItems[i], ItemSprites[i * 3]);
+            
             carouselItems[i].transform.parent = rotator.transform;
             
             (carouselItems[i].GetComponent(typeof(CarouselItem)) as CarouselItem).OnTouchStart += ItemTouchStarted;
@@ -168,13 +172,17 @@ public class PageCarousel : BasePage {
     }
     
     public static bool CheckTexturesLoaded() {
-        print("3");
         return (PageMainTopic.FlatTransitionSeq != null) && (PageMainTopic.FlatTransitionSeq[5] != null) && (PageMainTopic.FlatTransitionSeq[5].Length != 0);
     }
 
 
     private void SetItemTexture(GameObject go, Texture texture) {
         go.GetComponent<Renderer>().material.SetTexture("_MainTex", texture);
+        //go.GetComponent<Renderer>().material.mainTexture =  texture;
+    }
+
+    private void SetItemTexture(GameObject go, Sprite sprite) {
+        go.GetComponent<SpriteRenderer>().sprite = sprite;
         //go.GetComponent<Renderer>().material.mainTexture =  texture;
     }
 
@@ -254,9 +262,10 @@ public class PageCarousel : BasePage {
         }
 
         foreach (GameObject caruoselItem in carouselItems) {
-            SetItemTexture(carouselItems[itemCount], ItemTextures[itemCount * 3 + 1]);
+            //SetItemTexture(carouselItems[itemCount], ItemTextures[itemCount * 3 + 1]);
+            SetItemTexture(carouselItems[itemCount], ItemSprites[itemCount * 3 + 1]);
             //carouselItems[itemCount].GetComponent<Renderer>().material.mainTexture = ItemTextures[itemCount * 3 + 1];
-            
+
             caruoselItem.transform.localPosition = new Vector3(caruoselItem.transform.localPosition.x, -0.2f, caruoselItem.transform.localPosition.z);
             caruoselItem.transform.localScale = BaseItemScale * 0.3f;
 
@@ -325,7 +334,8 @@ public class PageCarousel : BasePage {
     private void SetSelectedTexture() {
         int index = carouselItems.IndexOf(SelectedItem);
         if (index > -1) {
-            SetItemTexture(carouselItems[index], ItemTextures[index * 3]);
+            //SetItemTexture(carouselItems[index], ItemTextures[index * 3]);
+            SetItemTexture(carouselItems[index], ItemSprites[index * 3]);
             //carouselItems[index].GetComponent<Renderer>().material.mainTexture = ItemTextures[index * 3];
         }
     }
@@ -365,7 +375,8 @@ public class PageCarousel : BasePage {
             }
 
             //carouselItems[index].GetComponent<Renderer>().material.mainTexture = ItemTextures[index * 3 + 2];
-            SetItemTexture(carouselItems[index], ItemTextures[index * 3 + 2]);
+            //SetItemTexture(carouselItems[index], ItemTextures[index * 3 + 2]);
+            SetItemTexture(carouselItems[index], ItemSprites[index * 3 + 2]);
             SoundController.instance.playSingleSound(SoundController.SoundT.MainMenuSelection);
         }
 

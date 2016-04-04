@@ -8,6 +8,7 @@ tpsheetFileNames:
 - Assets/Resources/media/transitions/t2/packed/packed.tpsheet
 - Assets/Resources/media/transitions/t1/packed/packed.tpsheet
 - Assets/Resources/media/transitions/t0/packed/packed.tpsheet
+- Assets/pages/carousel/items/carouselitems.tpsheet
 textureFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.png
 - Assets/Resources/media/transitions/t5/packed/packed.png
@@ -16,8 +17,10 @@ textureFileNames:
 - Assets/Resources/media/transitions/t2/packed/packed.png
 - Assets/Resources/media/transitions/t1/packed/packed.png
 - Assets/Resources/media/transitions/t0/packed/packed.png
+- Assets/pages/carousel/items/carouselitems.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
 - 
 - 
 - 
