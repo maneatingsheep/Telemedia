@@ -124,6 +124,8 @@ public class PageManager : MonoBehaviour {
     private IEnumerator CheckReadytoNavigate() {
         
         while (!PageCarousel.CheckTexturesLoaded()) yield return new WaitForSeconds(0.25f);
+
+        PageCarousel.instance.ApplyTextures();
         Invoke("DelayedFirstNav", 2);
         
     }

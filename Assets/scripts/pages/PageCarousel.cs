@@ -55,8 +55,11 @@ public class PageCarousel : BasePage {
 
     private bool IsTransition3D = true;
 
+    public static PageCarousel instance;
+
     override internal void InitPage(XmlNode pageData) {
         base.InitPage(pageData);
+        instance = this;
 
         ExitTime = 0.8f;
 
@@ -85,7 +88,7 @@ public class PageCarousel : BasePage {
             float angRad = Mathf.Deg2Rad * i * (360 / Destinations.Count);
             carouselItems.Add(Instantiate(CarouselSpritePF, rotator.transform.position + new Vector3(radius * Mathf.Cos(angRad), 0, radius * Mathf.Sin(angRad)), new Quaternion()) as GameObject);
             //SetItemTexture(carouselItems[i], ItemTextures[i * 3]);
-            SetItemTexture(carouselItems[i], ItemSprites[i * 3]);
+            //SetItemTexture(carouselItems[i], ItemSprites[i * 3]);
 
             carouselItems[i].transform.parent = rotator.transform;
 
@@ -154,18 +157,23 @@ public class PageCarousel : BasePage {
 
     }
 
+    internal void ApplyTextures() {
+        for (int i = 0; i < carouselItems.Count; i++) {
+            SetItemTexture(carouselItems[i], ItemSprites[i * 3]);
+        }
+    }
+
     public static void LoadTextures() {
         PageMainTopic.FlatTransitionSeq = new Sprite[6][];
-        /*for (int i = 0; i < PageMainTopic.FlatTransitionSeq.Length; i++) {
+        for (int i = 0; i < PageMainTopic.FlatTransitionSeq.Length; i++) {
             if (PageMainTopic.FlatTransitionSeq[i] == null) {
                 PageMainTopic.FlatTransitionSeq[i] = Resources.LoadAll<Sprite>("media/transitions/t" + i + "/packed");
             }
 
-        }*/
+        }
     }
 
     public static bool CheckTexturesLoaded() {
-        return true;
         return (PageMainTopic.FlatTransitionSeq != null) && (PageMainTopic.FlatTransitionSeq[5] != null) && (PageMainTopic.FlatTransitionSeq[5].Length != 0);
     }
 
