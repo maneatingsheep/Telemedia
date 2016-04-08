@@ -88,7 +88,7 @@ public class PageCarousel : BasePage {
             float angRad = Mathf.Deg2Rad * i * (360 / Destinations.Count);
             carouselItems.Add(Instantiate(CarouselSpritePF, rotator.transform.position + new Vector3(radius * Mathf.Cos(angRad), 0, radius * Mathf.Sin(angRad)), new Quaternion()) as GameObject);
             //SetItemTexture(carouselItems[i], ItemTextures[i * 3]);
-            //SetItemTexture(carouselItems[i], ItemSprites[i * 3]);
+            SetItemTexture(carouselItems[i], ItemSprites[i * 3]);
 
             carouselItems[i].transform.parent = rotator.transform;
 
@@ -156,13 +156,7 @@ public class PageCarousel : BasePage {
         RegisterTransition(transitionData, Plane);
 
     }
-
-    internal void ApplyTextures() {
-        for (int i = 0; i < carouselItems.Count; i++) {
-            SetItemTexture(carouselItems[i], ItemSprites[i * 3]);
-        }
-    }
-
+    
     public static void LoadTextures() {
         PageMainTopic.FlatTransitionSeq = new Sprite[6][];
         for (int i = 0; i < PageMainTopic.FlatTransitionSeq.Length; i++) {
@@ -236,7 +230,7 @@ public class PageCarousel : BasePage {
         Logo.Scale = Logo.OutScale;
         if (previousDelay > 0 && SelectedItem != null) {
 
-            HOTween.To(SelectedItem.GetComponent<Renderer>().material, 0.5f, new TweenParms().Prop("color", AlphaColorTransparent).Ease(EaseType.Linear).Delay(0));
+            //HOTween.To(SelectedItem.GetComponent<Renderer>().material, 0.5f, new TweenParms().Prop("color", AlphaColorTransparent).Ease(EaseType.Linear).Delay(0));
             Invoke("PopUpCarousel", previousDelay);
 
             TransitionTweens.Add(HOTween.To(Logo, 0f, new TweenParms().Prop("Alpha", 1).Delay(previousDelay)));
