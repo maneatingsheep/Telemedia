@@ -274,7 +274,7 @@ public class PageCarousel : BasePage {
 
             //ClickTransition(caruoselItem.transform, 0.6f, new TweenParms().Prop("localPosition", targetPos).Prop("localScale", targetScale), new TweenParms().Prop("localPosition", targetClickPos).Prop("localScale", targetClickScale), 0.2f, itemCount * 0.15f, true);
             TransitionTweens.Add(HOTween.To(caruoselItem.transform, 0.6f, new TweenParms().Prop("localPosition", targetPos).Prop("localScale", targetScale).Delay(0f + itemCount * 0.3f)));
-            TransitionTweens.Add(HOTween.To(caruoselItem.GetComponent<Renderer>().material, 0.4f, new TweenParms().Prop("color", AlphaColorOpaque).Ease(EaseType.Linear).Delay(0f + itemCount * 0.3f)));
+            //TransitionTweens.Add(HOTween.To(caruoselItem.GetComponent<Renderer>().material, 0.4f, new TweenParms().Prop("color", AlphaColorOpaque).Ease(EaseType.Linear).Delay(0f + itemCount * 0.3f)));
 
             itemCount++;
         }
