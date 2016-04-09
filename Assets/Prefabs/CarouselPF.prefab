@@ -45,7 +45,7 @@ MonoBehaviour:
   ExitTime: 1
   StartEnterAnticipation: 0.5
   CarouselPF: {fileID: 100000, guid: 317e89e3e23556e42b98a13f5b7e1c44, type: 2}
-  CarouselSpritePF: {fileID: 100000, guid: 95c318c3edd9e9e4cacd160ab6dd5f11, type: 2}
+  CarouselSpritePF: {fileID: 11400000, guid: 95c318c3edd9e9e4cacd160ab6dd5f11, type: 2}
   BasePF: {fileID: 100000, guid: 8d37b85c043c457478da0ce7492ea715, type: 2}
   ItemTextures:
   - {fileID: 2800000, guid: 38c09606ae5bed744be580be2a0fa81d, type: 3}
