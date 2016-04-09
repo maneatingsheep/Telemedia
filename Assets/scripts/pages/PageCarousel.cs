@@ -158,10 +158,10 @@ public class PageCarousel : BasePage {
     }
     
     public static void LoadTextures() {
-        PageMainTopic.FlatTransitionSeq = new Sprite[6][];
+        PageMainTopic.FlatTransitionSeq = new Texture[6][];
         for (int i = 0; i < PageMainTopic.FlatTransitionSeq.Length; i++) {
             if (PageMainTopic.FlatTransitionSeq[i] == null) {
-                PageMainTopic.FlatTransitionSeq[i] = Resources.LoadAll<Sprite>("media/transitions/t" + i + "/packed");
+                PageMainTopic.FlatTransitionSeq[i] = Resources.LoadAll<Texture>("media/transitions/t" + i);
             }
 
         }

@@ -32,7 +32,7 @@ public class PageMainTopic : BasePage {
     public Sprite[] FlatTransitionSeq3;
     public Sprite[] FlatTransitionSeq4;
     public Sprite[] FlatTransitionSeq5;*/
-    public static Sprite[][] FlatTransitionSeq;
+    public static Texture[][] FlatTransitionSeq;
     private bool FlatTransitionPlaying = false;
     private TransitionData SideMenuTransitionData;
     private Vector3 SelectedItemInPosition;
