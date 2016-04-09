@@ -9,7 +9,7 @@ using System;
 public class PageCarousel : BasePage {
 
     public GameObject CarouselPF;
-    public GameObject CarouselSpritePF;
+    public CarouselItem CarouselSpritePF;
     public GameObject BasePF;
 
     public Texture[] ItemTextures;
@@ -22,7 +22,7 @@ public class PageCarousel : BasePage {
 
     private GameObject rotator;
     private float radius = 2.5f;
-    private List<GameObject> carouselItems = new List<GameObject>();
+    private List<CarouselItem> carouselItems = new List<CarouselItem>();
 
     private bool isDraggingItem = false;
     public float dragGrace = 0;
@@ -37,7 +37,7 @@ public class PageCarousel : BasePage {
     private Tweener graceTweener;
     private float TouchStartTime;
     private float _alpha;
-    private GameObject SelectedItem = null;
+    private CarouselItem SelectedItem = null;
 
     private GameObject SpinBase;
 
@@ -86,14 +86,14 @@ public class PageCarousel : BasePage {
 
         for (int i = 0; i < Destinations.Count; i++) {
             float angRad = Mathf.Deg2Rad * i * (360 / Destinations.Count);
-            carouselItems.Add(Instantiate(CarouselSpritePF, rotator.transform.position + new Vector3(radius * Mathf.Cos(angRad), 0, radius * Mathf.Sin(angRad)), new Quaternion()) as GameObject);
+            carouselItems.Add(Instantiate(CarouselSpritePF, rotator.transform.position + new Vector3(radius * Mathf.Cos(angRad), 0, radius * Mathf.Sin(angRad)), new Quaternion()) as CarouselItem);
             //SetItemTexture(carouselItems[i], ItemTextures[i * 3]);
             SetItemTexture(carouselItems[i], ItemSprites[i * 3]);
 
             carouselItems[i].transform.parent = rotator.transform;
 
-            (carouselItems[i].GetComponent(typeof(CarouselItem)) as CarouselItem).OnTouchStart += ItemTouchStarted;
-            (carouselItems[i].GetComponent(typeof(CarouselItem)) as CarouselItem).OnTouchEnd += ItemTouchEnded;
+            carouselItems[i].OnTouchStart += ItemTouchStarted;
+            carouselItems[i].OnTouchEnd += ItemTouchEnded;
         }
 
         SpinBase = Instantiate(BasePF) as GameObject;
@@ -172,12 +172,12 @@ public class PageCarousel : BasePage {
     }
 
 
-    private void SetItemTexture(GameObject go, Texture texture) {
+    private void SetItemTexture(CarouselItem go, Texture texture) {
         go.GetComponent<Renderer>().material.SetTexture("_MainTex", texture);
         //go.GetComponent<Renderer>().material.mainTexture =  texture;
     }
 
-    private void SetItemTexture(GameObject go, Sprite sprite) {
+    private void SetItemTexture(CarouselItem go, Sprite sprite) {
         go.GetComponent<SpriteRenderer>().sprite = sprite;
         //go.GetComponent<Renderer>().material.mainTexture =  texture;
     }
@@ -205,7 +205,7 @@ public class PageCarousel : BasePage {
             }
         }
 
-        foreach (GameObject item in carouselItems) {
+        foreach (CarouselItem item in carouselItems) {
             item.transform.rotation = Quaternion.identity;//Quaternion.LookRotation(Vector3.forward);
         }
     }
@@ -231,6 +231,7 @@ public class PageCarousel : BasePage {
         if (previousDelay > 0 && SelectedItem != null) {
 
             //HOTween.To(SelectedItem.GetComponent<Renderer>().material, 0.5f, new TweenParms().Prop("color", AlphaColorTransparent).Ease(EaseType.Linear).Delay(0));
+            HOTween.To(SelectedItem, 0.5f, new TweenParms().Prop("color", AlphaColorTransparent).Ease(EaseType.Linear).Delay(0));
             Invoke("PopUpCarousel", previousDelay);
 
             TransitionTweens.Add(HOTween.To(Logo, 0f, new TweenParms().Prop("Alpha", 1).Delay(previousDelay)));
@@ -251,13 +252,13 @@ public class PageCarousel : BasePage {
         if (SelectedItem != null) {
             SelectedItem.transform.parent = rotator.transform;
             float angRad = Mathf.Deg2Rad * carouselItems.IndexOf(SelectedItem) * (360 / Destinations.Count);
-            //HOTween.To(SelectedItem.renderer.material, 0.6f, new TweenParms().Prop("color", AlphaColorTransparent).Ease(EaseType.Linear).Delay(0));
+            HOTween.To(SelectedItem, 0.6f, new TweenParms().Prop("color", AlphaColorTransparent).Ease(EaseType.Linear).Delay(0));
             SelectedItem.transform.localPosition = new Vector3(radius * Mathf.Cos(angRad), 0, radius * Mathf.Sin(angRad));
             SelectedItem.transform.rotation = Quaternion.identity;
 
         }
 
-        foreach (GameObject caruoselItem in carouselItems) {
+        foreach (CarouselItem caruoselItem in carouselItems) {
             //SetItemTexture(carouselItems[itemCount], ItemTextures[itemCount * 3 + 1]);
             SetItemTexture(carouselItems[itemCount], ItemSprites[itemCount * 3 + 1]);
             //carouselItems[itemCount].GetComponent<Renderer>().material.mainTexture = ItemTextures[itemCount * 3 + 1];
@@ -270,11 +271,11 @@ public class PageCarousel : BasePage {
             Vector3 targetScale = BaseItemScale;
             //Vector3 targetClickScale = BaseItemScale * 1.1f; ;
 
-            caruoselItem.GetComponent<Renderer>().material.color = AlphaColorTransparent;
+            caruoselItem.color = AlphaColorTransparent;
 
             //ClickTransition(caruoselItem.transform, 0.6f, new TweenParms().Prop("localPosition", targetPos).Prop("localScale", targetScale), new TweenParms().Prop("localPosition", targetClickPos).Prop("localScale", targetClickScale), 0.2f, itemCount * 0.15f, true);
             TransitionTweens.Add(HOTween.To(caruoselItem.transform, 0.6f, new TweenParms().Prop("localPosition", targetPos).Prop("localScale", targetScale).Delay(0f + itemCount * 0.3f)));
-            //TransitionTweens.Add(HOTween.To(caruoselItem.GetComponent<Renderer>().material, 0.4f, new TweenParms().Prop("color", AlphaColorOpaque).Ease(EaseType.Linear).Delay(0f + itemCount * 0.3f)));
+            TransitionTweens.Add(HOTween.To(caruoselItem, 0.4f, new TweenParms().Prop("color", AlphaColorOpaque).Ease(EaseType.Linear).Delay(0f + itemCount * 0.3f)));
 
             itemCount++;
         }
@@ -302,10 +303,10 @@ public class PageCarousel : BasePage {
         base.DoExit(targetID);
 
         int itemCount = 0;
-        foreach (GameObject caruoselItem in carouselItems) {
+        foreach (CarouselItem caruoselItem in carouselItems) {
             if ((caruoselItem != SelectedItem) || (!IsTransition3D)) {
-                caruoselItem.GetComponent<Renderer>().material.color = AlphaColorOpaque;
-                HOTween.To(caruoselItem.GetComponent<Renderer>().material, 0.4f, new TweenParms().Prop("color", AlphaColorTransparent).Ease(EaseType.Linear).Delay(0.1f));
+                caruoselItem.color = AlphaColorOpaque;
+                HOTween.To(caruoselItem, 0.4f, new TweenParms().Prop("color", AlphaColorTransparent).Ease(EaseType.Linear).Delay(0.1f));
 
                 caruoselItem.transform.localPosition = new Vector3(caruoselItem.transform.localPosition.x, 0, caruoselItem.transform.localPosition.z);
                 caruoselItem.transform.localScale = BaseItemScale;
@@ -354,15 +355,15 @@ public class PageCarousel : BasePage {
         isDraggingItem = false;
         if (Time.time - TouchStartTime < 0.2f && NavigationEnabled && (OriginalMousePosition - Input.mousePosition).magnitude < Screen.width / 50) {
 
-            PageMainTopic.SelectedFlatTransition = carouselItems.IndexOf(target);
+            PageMainTopic.SelectedFlatTransition = carouselItems.IndexOf(target.GetComponent<CarouselItem>());
 
             //IsTransition3D = (PageMainTopic.SelectedFlatTransition != 2) && (PageMainTopic.SelectedFlatTransition != 0);
             //IsTransition3D = (target != carouselItems[2]);
             IsTransition3D = false;
 
-            int index = carouselItems.IndexOf(target);
+            int index = carouselItems.IndexOf(target.GetComponent<CarouselItem>());
 
-            SelectedItem = target;
+            SelectedItem = target.GetComponent<CarouselItem>();
 
             DipatchNavigate(Destinations[index], SelectedItem, (IsTransition3D) ? null : "2D");
 

@@ -21,8 +21,8 @@ public class BasePage : MonoBehaviour {
     public float StartEnterAnticipation = 0.5f;
 
     internal Color AlphaColorOpaque = new Color(1, 1, 1, 1);
-    //internal Color AlphaColorTransparent = new Color(1, 1, 1, 0);
-    internal Color AlphaColorTransparent = new Color(1, 1, 1, 1);
+    internal Color AlphaColorTransparent = new Color(1, 1, 1, 0);
+    //internal Color AlphaColorTransparent = new Color(1, 1, 1, 1);
 
     private CommonAssetHolder _CommonAssetHolder;
     private SRGUIManager _SRGUIManager;

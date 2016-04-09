@@ -227,7 +227,7 @@ public class PageMainTopic : BasePage {
         base.DoEnter(previousDelay, extraParams, extraData);
 
         if (extraParams != null) {
-            CentralObject = extraParams as GameObject;
+            CentralObject = (extraParams as Component).gameObject;
         }
 
 
