@@ -8,9 +8,9 @@ using System;
 
 public class PageCarousel : BasePage {
 
-    public GameObject CarouselPF;
+    public CarouselItem CarouselPF;
     public CarouselItem CarouselSpritePF;
-    public GameObject BasePF;
+    public CarouselItem BasePF;
 
     public Texture[] ItemTextures;
     public Sprite[] ItemSprites;
@@ -39,7 +39,7 @@ public class PageCarousel : BasePage {
     private float _alpha;
     private CarouselItem SelectedItem = null;
 
-    private GameObject SpinBase;
+    private CarouselItem SpinBase;
 
     private Vector3 RootPosition = new Vector3(-0.14f, -0.73f, 7.13f);
     private Vector3 ExitPosition = new Vector3(-6f, -3f, 20.13f);
@@ -96,7 +96,7 @@ public class PageCarousel : BasePage {
             carouselItems[i].OnTouchEnd += ItemTouchEnded;
         }
 
-        SpinBase = Instantiate(BasePF) as GameObject;
+        SpinBase = Instantiate(BasePF) as CarouselItem;
         SpinBase.transform.parent = gameObject.transform;
         SpinBase.transform.localPosition = new Vector3(0.0689217f, -0.84f, 2.838512f);
 

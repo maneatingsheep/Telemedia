@@ -97,19 +97,19 @@ public class BasePage : MonoBehaviour {
                         }
                         break;
                     case TransitionTypes.LocalPosition3D:
-                        (transitiondata.Target as GameObject).transform.localPosition = transitiondata.LocalPositions3D[1];
+                        (transitiondata.Target as CarouselItem).transform.localPosition = transitiondata.LocalPositions3D[1];
 
                         tweenParams = tweenParams.Prop("localPosition", transitiondata.LocalPositions3D[0]);
                         if (transitiondata.IsClick) {
                             clickTweenParams = clickTweenParams.Prop("localPosition", transitiondata.LocalPositions3D[2]);
                         }
 
-                        tweenTarget = (transitiondata.Target as GameObject).transform;
+                        tweenTarget = (transitiondata.Target as CarouselItem).transform;
                         break;
                     case TransitionTypes.Alpha3D:
-                        (transitiondata.Target as GameObject).GetComponent<Renderer>().material.color = AlphaColorTransparent;
+                        (transitiondata.Target as CarouselItem).color = AlphaColorTransparent;
                         tweenParams = tweenParams.Prop("color", AlphaColorOpaque);
-                        tweenTarget = (transitiondata.Target as GameObject).GetComponent<Renderer>().material;
+                        tweenTarget = (transitiondata.Target as CarouselItem);
                         break;
                 }
             }
@@ -158,18 +158,18 @@ public class BasePage : MonoBehaviour {
                         }
                         break;
                     case TransitionTypes.LocalPosition3D:
-                        (transitiondata.Target as GameObject).transform.localPosition = transitiondata.LocalPositions3D[0];
+                        (transitiondata.Target as CarouselItem).transform.localPosition = transitiondata.LocalPositions3D[0];
 
                         tweenParams = tweenParams.Prop("localPosition", transitiondata.LocalPositions3D[1]);
                         if (transitiondata.IsClick) {
                             clickTweenParams = clickTweenParams.Prop("localPosition", transitiondata.LocalPositions3D[2]);
                         }
-                        tweenTarget = (transitiondata.Target as GameObject).transform;
+                        tweenTarget = (transitiondata.Target as CarouselItem).transform;
                         break;
                     case TransitionTypes.Alpha3D:
-                        (transitiondata.Target as GameObject).GetComponent<Renderer>().material.color = AlphaColorOpaque;
+                        (transitiondata.Target as CarouselItem).color = AlphaColorOpaque;
                         tweenParams = tweenParams.Prop("color", AlphaColorTransparent);
-                        tweenTarget = (transitiondata.Target as GameObject).GetComponent<Renderer>().material;
+                        tweenTarget = (transitiondata.Target as CarouselItem);
                         break;
                 }
             }
