@@ -22,6 +22,7 @@ public class StatusManager : MonoBehaviour {
     private XmlNodeList StatusPages;
     private XmlNode StatusNode;
     private XmlNode ClientNode;
+    private byte[] ClientImage;
     
     public StatusManager() {
         Instance = this;
@@ -45,6 +46,8 @@ public class StatusManager : MonoBehaviour {
     }
 
     public void ResetCurrentStatus(){
+
+        ClientImage = null;
 
         CurrnetStatusXml = new XmlDocument();
         CurrnetStatusXml.LoadXml(TemplateStatus.text);
@@ -169,10 +172,11 @@ public class StatusManager : MonoBehaviour {
 
         string filename = SaveLocally(true);
 
-        bool res = SendSingleMail(email, title, CurrnetStatusXml);
+        bool res = SendSingleMail(email, title, CurrnetStatusXml, SessionsFolderPath + filename + ".png");
 
         if (res) {
-            File.Delete(SessionsFolderPath + filename);
+            File.Delete(SessionsFolderPath + filename + ".xml");
+            File.Delete(SessionsFolderPath + filename + ".png");
         } else {
         }
         return res;
@@ -181,27 +185,46 @@ public class StatusManager : MonoBehaviour {
 
     internal void TryToMailUnsent() {
         
-        string[] files = Directory.GetFiles(SessionsFolderPath);
+        string[] allFiles = Directory.GetFiles(SessionsFolderPath);
+        List<string> xmlFiles = new List<string>();
+        List<string> pngFiles = new List<string>();
 
-        for (int i = 0; i < files.Length; i++) {
-            if (files[i].Substring(SessionsFolderPath.Length, 1) == "C") {
+        for (int i = 0; i < allFiles.Length; i++) {
+            if (allFiles[i].Substring(allFiles[i].Length - 4, 4) == ".xml") {
+                xmlFiles.Add(allFiles[i].Substring(0, allFiles[i].Length - 4));
+            } else {
+                pngFiles.Add(allFiles[i].Substring(0, allFiles[i].Length - 4));
+            }
+        }
+
+
+        for (int i = 0; i < xmlFiles.Count; i++) {
+            if (xmlFiles[i].Substring(SessionsFolderPath.Length, 1) == "C") {
                 XmlDocument doc = new XmlDocument();
-                doc.Load(files[i]);
+                doc.Load(xmlFiles[i] + ".xml");
                 string mail = doc.GetElementsByTagName("agentMail")[0].InnerText;
                 string header = doc.GetElementsByTagName("mailHeader")[0].InnerText;
-                print(mail + " " + header);
 
-                bool res = SendSingleMail(mail, header, doc);
+                int indexofpng = pngFiles.IndexOf(xmlFiles[i]);
+                bool res;
+                if (indexofpng > -1) {
+                    res = SendSingleMail(mail, header, doc, pngFiles[indexofpng] + ".png");
+                    if (res) {
+                        File.Delete(pngFiles[indexofpng]);
+                    }
+                } else {
+                    res = SendSingleMail(mail, header, doc, "");
+                }
 
                 if (res) {
-                    File.Delete(files[i]);
+                    File.Delete(xmlFiles[i]);
                 }
                 break;
             }
         }
     }
 
-    private bool SendSingleMail(string email, string title, XmlDocument srcDoc){
+    private bool SendSingleMail(string email, string title, XmlDocument srcDoc, string savedImagePath){
         
         string body = title + "\n" + ConstractMailBody(srcDoc);
        
@@ -269,8 +292,15 @@ public class StatusManager : MonoBehaviour {
             string escapedBody = WWW.EscapeURL(body);
 
             escapedBody = escapedBody.Replace("+", "%20");
+            string mailStr;
+            if (string.IsNullOrEmpty(savedImagePath)) {
+                mailStr = "mailto:" + email + "?subject=Meeting%20Summary&body=" + escapedBody;
+            } else {
+                mailStr = "mailto:" + email + "?subject=Meeting%20Summary&body=" + escapedBody + "&attachment = " + WWW.EscapeURL("\"" + savedImagePath + "\"");
+            }
 
-            Application.OpenURL("mailto:" + email + "?subject=Meeting%20Summary&body=" + escapedBody);
+            Application.OpenURL(mailStr);
+
             print("Shimon - mail sending ok");
             return true;
         } catch (Exception ex) {
@@ -291,10 +321,14 @@ public class StatusManager : MonoBehaviour {
         string surName = CurrnetStatusXml.GetElementsByTagName("surname")[0].InnerText;
         surName = Regex.Replace(surName, @"[^a-zA-Z0-9 ]", "");
 
-        string targetFilename = ((isComplete) ? "C" : "I") + String.Format("{0:dd-MM-yyyy_HH-mm-ss}", DateTime.Now) + firstName + " " + surName + ".xml";
+        string targetFilename = ((isComplete) ? "C" : "I") + String.Format("{0:dd-MM-yyyy_HH-mm-ss}", DateTime.Now) + firstName + " " + surName;
 
-        CurrnetStatusXml.Save(SessionsFolderPath + targetFilename);
+        CurrnetStatusXml.Save(SessionsFolderPath + targetFilename + ".xml");
 
+        if (ClientImage != null) {
+            File.WriteAllBytes(SessionsFolderPath + targetFilename + ".png", ClientImage);
+        }
+        
         return targetFilename;
 
 
@@ -554,6 +588,7 @@ public class ClientDetails {
     public string PhoneNumber = "";
     public string AircraftType = "";
     public string Notes = "";
+    public byte[] picture;
 }
 
 public interface IStatusDependant {

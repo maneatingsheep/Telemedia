@@ -649,15 +649,16 @@ public class Management : MonoBehaviour {
         details.AircraftType = ClientDetailsAircraft.Text;
         details.Notes = ClientDetailsNotes.Text;
 
-
+        if (photo != null) {
+            details.picture = photo.EncodeToPNG();
+        }
+        
         StatusMgr.SetClientDetails(details);
     }
 
     private void TakePicture() {
         if (webCamTexture.isPlaying) {
             
-            
-
             photo = new Texture2D(webCamTexture.width, webCamTexture.height);
             photo.SetPixels(webCamTexture.GetPixels());
             photo.Apply();
