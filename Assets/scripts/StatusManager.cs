@@ -9,8 +9,8 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-
-
+using System.Net.Mail;
+using System.ComponentModel;
 
 public class StatusManager : MonoBehaviour {
     
@@ -153,7 +153,7 @@ public class StatusManager : MonoBehaviour {
         return node;
     }
 
-    internal bool TryToMailStatus(string email, string title) {
+    internal void TryToMailStatus(string email, string title) {
         XmlNode agentMailNode = CurrnetStatusXml.CreateNode(XmlNodeType.Element, "agentMail", "");
         agentMailNode.InnerText = email;
         ClientNode.AppendChild(agentMailNode);
@@ -172,14 +172,15 @@ public class StatusManager : MonoBehaviour {
 
         string filename = SaveLocally(true);
 
-        bool res = SendSingleMail(email, title, CurrnetStatusXml, SessionsFolderPath + filename + ".png");
+        SendSingleMail(email, title, CurrnetStatusXml, SessionsFolderPath + filename);
+        /*bool res = SendSingleMail(email, title, CurrnetStatusXml, SessionsFolderPath + filename);
 
         if (res) {
             File.Delete(SessionsFolderPath + filename + ".xml");
-            File.Delete(SessionsFolderPath + filename + ".png");
+            //File.Delete(SessionsFolderPath + filename + ".png");
         } else {
-        }
-        return res;
+        }*/
+        
 
     }
 
@@ -208,46 +209,65 @@ public class StatusManager : MonoBehaviour {
                 int indexofpng = pngFiles.IndexOf(xmlFiles[i]);
                 bool res;
                 if (indexofpng > -1) {
-                    res = SendSingleMail(mail, header, doc, pngFiles[indexofpng] + ".png");
+                    SendSingleMail(mail, header, doc, pngFiles[indexofpng]);
+                    /*res = SendSingleMail(mail, header, doc, pngFiles[indexofpng]);
                     if (res) {
                         File.Delete(pngFiles[indexofpng]);
-                    }
+                    }*/
                 } else {
-                    res = SendSingleMail(mail, header, doc, "");
+                    SendSingleMail(mail, header, doc, "");
+                    //res = SendSingleMail(mail, header, doc, "");
                 }
 
-                if (res) {
+                /*if (res) {
                     File.Delete(xmlFiles[i]);
-                }
+                }*/
                 break;
             }
         }
     }
 
-    private bool SendSingleMail(string email, string title, XmlDocument srcDoc, string savedImagePath){
+    private void SendSingleMail(string email, string title, XmlDocument srcDoc, string savedImagePath){
         
         string body = title + "\n" + ConstractMailBody(srcDoc);
        
-        /*MailMessage mail = new MailMessage();
-        mail.From = new MailAddress("ruag.ba.app@gmail.com");
+        MailMessage mail = new MailMessage();
+        //mail.From = new MailAddress("ruag.ba.app@gmail.com");
+        mail.From = new MailAddress("ruag.app@yahoo.com");
         mail.To.Add(email);
         mail.Subject = "Meeting Summary";
         mail.Body = body;
 
-        SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+        //SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com", 587);
+        SmtpClient SmtpServer = new SmtpClient("smtp.mail.yahoo.com", 587);
+        
+        //SmtpServer.Port = 465;
         //SmtpServer.Port = 587;
-        SmtpServer.Port = 25;
-        SmtpServer.Credentials = new NetworkCredential("ruag.ba.app@gmail.com", "ruagapp2014") as ICredentialsByHost;
+        //SmtpServer.Port = 25;
+        //SmtpServer.Credentials = new NetworkCredential("ruag.ba.app@gmail.com", "ruagapp2014") as ICredentialsByHost;
+        SmtpServer.Credentials = new NetworkCredential("ruag.app@yahoo.com", "ruagapp2014") as ICredentialsByHost;
         SmtpServer.UseDefaultCredentials = false;
         SmtpServer.Timeout = 20000;
-        SmtpServer.EnableSsl = false;
+        SmtpServer.EnableSsl = true;
+        //SmtpServer.EnableSsl = false;
 
-        ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
+        if (!string.IsNullOrEmpty(savedImagePath)) {
+            mail.Attachments.Add(new Attachment(savedImagePath + ".png"));
+        }
 
 
-        try {
+            ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
+        //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+
+
+
+        SmtpServer.SendAsync(mail, savedImagePath);
+        SmtpServer.SendCompleted += sendComplete;
+
+        //return true;
+
+        /*try {
             SmtpServer.Send(mail);
-
             print("Mail sent");
             return true;
         } catch (Exception ex) {
@@ -263,7 +283,7 @@ public class StatusManager : MonoBehaviour {
         body = body.Replace(new String((char)0x0A, 1), "%0A");
         body = body.Replace(new String((char)0x26, 1), "%26");*/
 
-        print("Shimon - Body constructed");
+        /*print("Shimon - Body constructed");
 
 
         ConnectionTesterStatus connectionTestResult = Network.TestConnection();
@@ -296,9 +316,10 @@ public class StatusManager : MonoBehaviour {
             if (string.IsNullOrEmpty(savedImagePath)) {
                 mailStr = "mailto:" + email + "?subject=Meeting%20Summary&body=" + escapedBody;
             } else {
-                mailStr = "mailto:" + email + "?subject=Meeting%20Summary&body=" + escapedBody + "&attachment = " + WWW.EscapeURL("\"" + savedImagePath + "\"");
+                mailStr = "mailto:" + email + "?subject=Meeting%20Summary&body=" + escapedBody + "&attachment=" + WWW.EscapeURL(savedImagePath);
             }
 
+            print(mailStr);
             Application.OpenURL(mailStr);
 
             print("Shimon - mail sending ok");
@@ -306,11 +327,20 @@ public class StatusManager : MonoBehaviour {
         } catch (Exception ex) {
             print("Shimon - Mail Exception caught: " + ex.ToString());
             return false;
-        } 
+        } */
 
 
 
 
+    }
+
+    private void sendComplete(object sender, AsyncCompletedEventArgs e) {
+        if (e.Error == null) {
+            
+            //File.WriteAllBytes(e.UserState + ".png", new byte[0]);
+            File.Delete(e.UserState + ".png");
+            File.Delete(e.UserState + ".xml");
+        }
     }
 
     internal string SaveLocally(bool isComplete) {
@@ -439,6 +469,8 @@ public class StatusManager : MonoBehaviour {
                     break;
             }
         }
+
+        ClientImage = details.picture;
     }
 
     private string ConstractMailBody(XmlDocument srcDoc) {
