@@ -172,7 +172,9 @@ public class StatusManager : MonoBehaviour {
 
         string filename = SaveLocally(true);
 
-        SendSingleMail(email, title, CurrnetStatusXml, SessionsFolderPath + filename);
+        
+        SendSingleMail(email, title, CurrnetStatusXml, SessionsFolderPath + filename, ClientImage != null);
+        
         /*bool res = SendSingleMail(email, title, CurrnetStatusXml, SessionsFolderPath + filename);
 
         if (res) {
@@ -206,29 +208,17 @@ public class StatusManager : MonoBehaviour {
                 string mail = doc.GetElementsByTagName("agentMail")[0].InnerText;
                 string header = doc.GetElementsByTagName("mailHeader")[0].InnerText;
 
-                int indexofpng = pngFiles.IndexOf(xmlFiles[i]);
-                bool res;
-                if (indexofpng > -1) {
-                    SendSingleMail(mail, header, doc, pngFiles[indexofpng]);
-                    /*res = SendSingleMail(mail, header, doc, pngFiles[indexofpng]);
-                    if (res) {
-                        File.Delete(pngFiles[indexofpng]);
-                    }*/
-                } else {
-                    SendSingleMail(mail, header, doc, "");
-                    //res = SendSingleMail(mail, header, doc, "");
-                }
-
-                /*if (res) {
-                    File.Delete(xmlFiles[i]);
-                }*/
-                break;
+                bool hasImage = pngFiles.IndexOf(xmlFiles[i]) > -1;
+                
+                SendSingleMail(mail, header, doc, xmlFiles[i], hasImage);
+                
             }
         }
     }
 
-    private void SendSingleMail(string email, string title, XmlDocument srcDoc, string savedImagePath){
-        
+    private void SendSingleMail(string email, string title, XmlDocument srcDoc, string filesPath, bool attachImage){
+        Management.DebugLab.Text += "1\n";
+
         string body = title + "\n" + ConstractMailBody(srcDoc);
        
         MailMessage mail = new MailMessage();
@@ -251,17 +241,20 @@ public class StatusManager : MonoBehaviour {
         SmtpServer.EnableSsl = true;
         //SmtpServer.EnableSsl = false;
 
-        if (!string.IsNullOrEmpty(savedImagePath)) {
-            mail.Attachments.Add(new Attachment(savedImagePath + ".png"));
+        Management.DebugLab.Text += "2\n";
+
+        if (attachImage) {
+            mail.Attachments.Add(new Attachment(filesPath + ".png"));
         }
 
+        Management.DebugLab.Text += "3\n";
 
-            ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
+        ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
         //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 
 
 
-        SmtpServer.SendAsync(mail, savedImagePath);
+        SmtpServer.SendAsync(mail, filesPath);
         SmtpServer.SendCompleted += sendComplete;
 
         //return true;
@@ -336,10 +329,11 @@ public class StatusManager : MonoBehaviour {
 
     private void sendComplete(object sender, AsyncCompletedEventArgs e) {
         if (e.Error == null) {
-            
+            Management.DebugLab.Text += "4\n";
             //File.WriteAllBytes(e.UserState + ".png", new byte[0]);
-            File.Delete(e.UserState + ".png");
+            //File.Delete(e.UserState + ".png");
             File.Delete(e.UserState + ".xml");
+            Management.DebugLab.Text += "5\n";
         }
     }
 
@@ -384,7 +378,7 @@ public class StatusManager : MonoBehaviour {
     }
 
     public SessionInfo[] GetFileList() {
-        string[] files = Directory.GetFiles(SessionsFolderPath);
+        string[] files = Directory.GetFiles(SessionsFolderPath, "*.xml");
 
         SessionInfo[] retSessions = new SessionInfo[files.Length];
 
@@ -567,7 +561,7 @@ public class StatusManager : MonoBehaviour {
     }
 
     internal void LoadStatus(int index) {
-        string[] files = Directory.GetFiles(SessionsFolderPath);
+        string[] files = Directory.GetFiles(SessionsFolderPath, "*.xml");
 
         int unfinishCount = 0;
 

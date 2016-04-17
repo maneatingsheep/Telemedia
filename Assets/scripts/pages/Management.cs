@@ -23,6 +23,8 @@ public class Management : MonoBehaviour {
 
     private int _FoldState = -1;
 
+    public static SRGUILabel DebugLab;
+
     private List<SRGUIInput> MarkedInputs = new List<SRGUIInput>();
     private List<SRGUILabel> MarkedTags = new List<SRGUILabel>();
 
@@ -152,6 +154,8 @@ public class Management : MonoBehaviour {
 
         float inputWidth = 280;
         float inputHeight = 30;
+
+        
 
         ClientDetailsCont = new SRGUIContainer();
         cont.children.Add(ClientDetailsCont);
@@ -371,6 +375,13 @@ public class Management : MonoBehaviour {
         SendAllButt.Position = new Vector2(290, 15);
         SendAllButt.GroupID = 0;
         UnsentSessionsCont.children.Add(SendAllButt);
+
+
+        DebugLab = new SRGUILabel();
+        DebugLab.Style = CommonAssetHolder.instance.GetCustomStyle(SendAllText);
+        DebugLab.Text = "";
+        cont.children.Add(DebugLab);
+
 
         meetingPage = 0;
         UpdateSessionsList(true);
