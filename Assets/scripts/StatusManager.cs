@@ -220,22 +220,35 @@ public class StatusManager : MonoBehaviour {
         Management.DebugLab.Text += "1\n";
 
         string body = title + "\n" + ConstractMailBody(srcDoc);
-       
+
+        Management.DebugLab.Text += "1a\n";
+
         MailMessage mail = new MailMessage();
+        Management.DebugLab.Text += "1b\n";
+
+
         //mail.From = new MailAddress("ruag.ba.app@gmail.com");
         mail.From = new MailAddress("ruag.app@yahoo.com");
         mail.To.Add(email);
         mail.Subject = "Meeting Summary";
         mail.Body = body;
 
+        Management.DebugLab.Text += "1c\n";
+
         //SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com", 587);
         SmtpClient SmtpServer = new SmtpClient("smtp.mail.yahoo.com", 587);
-        
+
         //SmtpServer.Port = 465;
         //SmtpServer.Port = 587;
         //SmtpServer.Port = 25;
         //SmtpServer.Credentials = new NetworkCredential("ruag.ba.app@gmail.com", "ruagapp2014") as ICredentialsByHost;
+
+        Management.DebugLab.Text += "1d\n";
+
         SmtpServer.Credentials = new NetworkCredential("ruag.app@yahoo.com", "ruagapp2014") as ICredentialsByHost;
+
+        Management.DebugLab.Text += "1e\n";
+
         SmtpServer.UseDefaultCredentials = false;
         SmtpServer.Timeout = 20000;
         SmtpServer.EnableSsl = true;
