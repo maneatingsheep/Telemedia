@@ -236,11 +236,12 @@ public class StatusManager : MonoBehaviour {
         Management.DebugLab.Text += "1c\n";
 
         //SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com", 587);
-        SmtpClient SmtpServer = new SmtpClient("smtp.mail.yahoo.com", 587);
+        //SmtpClient SmtpServer = new SmtpClient("smtp.mail.yahoo.com", 587);
+        SmtpClient SmtpServer = new SmtpClient("smtp.mail.yahoo.com");
 
         //SmtpServer.Port = 465;
         //SmtpServer.Port = 587;
-        //SmtpServer.Port = 25;
+        SmtpServer.Port = 25;
         //SmtpServer.Credentials = new NetworkCredential("ruag.ba.app@gmail.com", "ruagapp2014") as ICredentialsByHost;
 
         Management.DebugLab.Text += "1d\n";
@@ -267,7 +268,7 @@ public class StatusManager : MonoBehaviour {
 
 
 
-        SmtpServer.SendAsync(mail, filesPath);
+        SmtpServer.Send(mail);
         SmtpServer.SendCompleted += sendComplete;
 
         //return true;

@@ -35,7 +35,7 @@ public class PageMainTopic : BasePage {
     public static Sprite[][] FlatTransitionSeq;
     private bool FlatTransitionPlaying = false;
     private TransitionData SideMenuTransitionData;
-    private Vector3 SelectedItemInPosition;
+    private Vector3[] SelectedItemInPosition;
 
     public static int SelectedFlatTransition;
 
@@ -45,8 +45,15 @@ public class PageMainTopic : BasePage {
         //3D
         gameObject.transform.position = new Vector3(0, 0, -10f);
 
-        SelectedItemInPosition = new Vector3(0.1683824f, -0.05769891f, 11.72f);
-        
+        SelectedItemInPosition = new Vector3[6];
+        //SelectedItemInPosition = new Vector3(0.1683824f, -0.05769891f, 11.72f);
+        SelectedItemInPosition[0] = new Vector3(0.185f, -0.06f, 12.18f);//limo
+        SelectedItemInPosition[1] = new Vector3(0.32f, -0.01f, 12.3f);//stamp
+        SelectedItemInPosition[2] = new Vector3(0.151f, -0.08f, 12.237f);//knife
+        SelectedItemInPosition[3] = new Vector3(0.345f, -0.044f, 11.865f);//system
+        SelectedItemInPosition[4] = new Vector3(0.361f, -0.053f, 12.078f);//cabin
+        SelectedItemInPosition[5] = new Vector3(0.255f, -0.06f, 12.606f);//paint
+
         //back butt
         createStandardBack();
 
@@ -310,7 +317,7 @@ public class PageMainTopic : BasePage {
 
                     CentralObject.transform.parent = this.transform;
 
-                    CentralObject.transform.localPosition = SelectedItemInPosition;
+                    CentralObject.transform.localPosition = SelectedItemInPosition[SelectedFlatTransition];
                     CentralObject.transform.rotation = Quaternion.Euler(0, 2.32194f, 0);
                     CentralObject.transform.localScale = new Vector3(1.342f, 1.2f, 1.1f);
                     CentralObject.GetComponent<Renderer>().material.color = AlphaColorOpaque;
