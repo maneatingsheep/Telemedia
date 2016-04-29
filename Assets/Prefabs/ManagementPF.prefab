@@ -23,7 +23,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .178465843, y: .0382668152, z: -10}
+  m_LocalPosition: {x: 0.17846584, y: 0.038266815, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -44,6 +44,8 @@ MonoBehaviour:
   TransparentText: {fileID: 0}
   IsOpen: 0
   ClientBackText: {fileID: 2800000, guid: f62a2636714dec64385c546476a4e014, type: 3}
+  HintBack: {fileID: 2800000, guid: 7b363f746e5336745a92f4f3022cf60c, type: 3}
+  HintSingle: {fileID: 2800000, guid: 8b8183940a1038e4095c9ff94796f9c8, type: 3}
   MeetingBackText: {fileID: 2800000, guid: 283f8b48b315a2043a8a58e1c93a8804, type: 3}
   LastSessionTexture: {fileID: 2800000, guid: 98868cb5c09ff024bb7e410ef62a2500, type: 3}
   DotTexture: {fileID: 2800000, guid: 662f3cbf270b64d46b2dfb5ea5fb9cb9, type: 3}

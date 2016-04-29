@@ -55,8 +55,14 @@ public class Management : MonoBehaviour {
     private Texture2D photo;
 
     //end meeting
+    public Texture2D HintBack;
+    public Texture2D HintSingle;
+
     private SRGUIContainer EndMeetingCont;
-    private SRGUILabel SendToHint;
+    private SRGUITexture SendToHintBack;
+    private SRGUIButton[] SendToHintsButts = new SRGUIButton[5];
+    private SRGUILabel[] SendToHintsLabels = new SRGUILabel[5];
+    private SRGUIContainer SendToHintsCont;
     private SRGUIInput SendToInput;
     private SRGUICheckButton RememberMeCheck;
     private SRGUIInput SendtitleInput;
@@ -242,14 +248,7 @@ public class Management : MonoBehaviour {
         endMeetingBackText.SetTexture(MeetingBackText);
         EndMeetingCont.children.Add(endMeetingBackText);
 
-        SendToHint = new SRGUILabel();
-        //SendToHint.SetSize(new Vector2(inputWidth - 10, inputHeight));
-        SendToHint.Style = CommonAssetHolder.instance.GetCustomStyle(CommonAssetHolder.FontNameType.ManagementTitle, 20);
-        SendToHint.Style.normal.textColor = new Color(0.5f, 0.5f, 0.5f);
-        SendToHint.Position = new Vector2(40, 5);
-        SendToHint.Text = "";
-        EndMeetingCont.children.Add(SendToHint);
-
+        
         SendToInput = new SRGUIInput();
         SendToInput.SetSize(new Vector2(inputWidth - 10, inputHeight));
         SendToInput.Style = CommonAssetHolder.instance.GetCustomStyle(CommonAssetHolder.FontNameType.ManagementTitle, 20);
@@ -290,6 +289,35 @@ public class Management : MonoBehaviour {
         SaveMeetingButt.setCustomSize(new Vector2(80, 30));
         SaveMeetingButt.Position = new Vector2(40, 230);
         EndMeetingCont.children.Add(SaveMeetingButt);
+
+
+        SendToHintsCont = new SRGUIContainer();
+        SendToHintsCont.Position = new Vector2(350, 5);
+        EndMeetingCont.children.Add(SendToHintsCont);
+
+        SendToHintBack = new SRGUITexture();
+        //SendToHintBack.Position = new Vector2(360, 5);
+        SendToHintBack.SetTexture(HintBack);
+        SendToHintsCont.children.Add(SendToHintBack);
+        for (int i = 0; i < SendToHintsButts.Length; i++) {
+            SendToHintsButts[i] = new SRGUIButton();
+            SendToHintsButts[i].GroupID = 0;
+            SendToHintsButts[i].Style = CommonAssetHolder.instance.GetCustomStyle(CommonAssetHolder.FontNameType.ManagementTitle, 26);
+            SendToHintsButts[i].Style.normal.background = HintSingle;
+            SendToHintsButts[i].Position = new Vector2(5, 5 + 50 * i);
+
+            SendToHintsLabels[i] = new SRGUILabel();
+            SendToHintsLabels[i].Style = CommonAssetHolder.instance.GetCustomStyle(CommonAssetHolder.FontNameType.ManagementTitle, 26);
+            SendToHintsLabels[i].Position = SendToHintsButts[i].Position + new Vector2(5, 5);
+            SendToHintsLabels[i].setCustomSize(new Vector2(390, 50));
+            SendToHintsLabels[i].Style.normal.textColor = Color.black;
+
+            SendToHintsLabels[i].Text = "aaaa " + i;
+            SendToHintsLabels[i].setCustomSize(SendToHintsLabels[i].Size);
+            SendToHintsCont.children.Add(SendToHintsLabels[i]);
+            SendToHintsCont.children.Add(SendToHintsButts[i]);
+        }
+
 
         //last meetings
 
@@ -380,7 +408,7 @@ public class Management : MonoBehaviour {
         DebugLab = new SRGUILabel();
         DebugLab.Style = CommonAssetHolder.instance.GetCustomStyle(SendAllText);
         DebugLab.Text = "";
-        cont.children.Add(DebugLab);
+        //cont.children.Add(DebugLab);
 
 
         meetingPage = 0;
@@ -413,17 +441,27 @@ public class Management : MonoBehaviour {
                 SRGUIManager.instance.ActiveButtonGroup = -1;
             } else {
                 SRGUIManager.instance.ActiveButtonGroup = 0;
+                SendToHintsCont.Enabled = false;
             }
             if (caller == MeetingSummaryButt) {
                 OnNavigate(MeetingSummaryButt.destination, null, null);
             }
-        } else if (caller == ClientDetailsButt) {
+            
+            return;
+        }
+        if (caller == ClientDetailsButt) {
             FoldState = (FoldState == 0) ? -1 : 0;
-        } else if (caller == EndMeetingButt) {
+            return;
+        }
+        if (caller == EndMeetingButt) {
             FoldState = (FoldState == 1) ? -1 : 1;
-        } else if (caller == LastMeetingsButt) {
+            return;
+        }
+        if (caller == LastMeetingsButt) {
             FoldState = (FoldState == 2) ? -1 : 2;
-        } else if (caller == SendMeetingButt) {
+            return;
+        }
+        if (caller == SendMeetingButt) {
            
             ProcessEmailAdress();
 
@@ -431,39 +469,59 @@ public class Management : MonoBehaviour {
             FoldState = -1;
             UpdateSessionsList(true);
             StatusMgr.ResetCurrentStatus();
-        } else if (caller == SaveMeetingButt) {
+            return;
+        }
+        if (caller == SaveMeetingButt) {
             StatusMgr.SaveLocally(false);
             FoldState = -1;
             UpdateSessionsList(true);
             StatusMgr.ResetCurrentStatus();
-        } else if (caller == NextPageButt) {
+            return;
+        }
+        if (caller == NextPageButt) {
             meetingPage++;
             UpdateSessionsList(false);
-        } else if (caller == PrevPageButt) {
+            return;
+        }
+        if (caller == PrevPageButt) {
             meetingPage--;
             UpdateSessionsList(false);
-        } else if (caller == SaveClientButt) {
+            return;
+        }
+        if (caller == SaveClientButt) {
             SaveClientDetails();
             FoldState = -1;
-        } else if (caller == TakePictureButt) {
+            return;
+        }
+        if (caller == TakePictureButt) {
             TakePicture();
-        } else if (caller == SendAllButt) {
+            return;
+        }
+        if (caller == SendAllButt) {
             StatusMgr.TryToMailUnsent();
             UpdateSessionsList(true);
-        } else {
-            for (int i = 0; i < ReopenExistingMeetingButts.Length; i++) {
-                if (ReopenExistingMeetingButts[i] == caller) {
-                    StatusMgr.LoadStatus(i + meetingPage * TotalMettingFields);
-                    FoldState = -1;
-                    UpdateSessionsList(true);
-                    //OnNavigate(PageManager.ROOT_DESTINATION, null, null);
-                }
-			}
-            
+            return;
+        }
+        
+        for (int i = 0; i < ReopenExistingMeetingButts.Length; i++) {
+            if (ReopenExistingMeetingButts[i] == caller) {
+                StatusMgr.LoadStatus(i + meetingPage * TotalMettingFields);
+                FoldState = -1;
+                UpdateSessionsList(true);
+                return;
+                //OnNavigate(PageManager.ROOT_DESTINATION, null, null);
+            }
+		}
+
+        for (int i = 0; i < SendToHintsButts.Length; i++) {
+            if (SendToHintsButts[i] == caller) {
+                EmailSelectedFromHintList(i);
+               return;
+            }
         }
 
     }
-
+    
     private void ProcessEmailAdress() {
         
         if (RememberMeCheck.Checked) {
@@ -555,20 +613,51 @@ public class Management : MonoBehaviour {
     }
 
     private void UpdateSuggestedEmails() {
-        if (SendToInput.Text == "") {
-            SendToHint.Text = "";
-        } else {
+        ShowSuggestedEmails(null);
+        if (SendToInput.Text != "") {
             if (PlayerPrefs.HasKey("UsedEmails")) {
                 string JSONEmails = PlayerPrefs.GetString("UsedEmails");
                 StringArrJSONWrapper mailsObj = JsonUtility.FromJson<StringArrJSONWrapper>(JSONEmails);
+
+                List<string> emails = new List<string>();
                 for (int i = 0; i < mailsObj.mails.Length; i++) {
                     if (mailsObj.mails[i].Contains(SendToInput.Text.ToLower())) {
-                        print(mailsObj.mails[i]);
+                        //print(mailsObj.mails[i]);
+                        emails.Add(mailsObj.mails[i]);
                     }
                 }
+
+
+                ShowSuggestedEmails(emails);
             }
+        }   
+    }
+
+    private void ShowSuggestedEmails(List<string> emails) {
+        if (emails == null || emails.Count == 0) {
+            SendToHintsCont.Enabled = false;
+        } else {
+            SendToHintsCont.Enabled = true;
+            int totalEmails = Math.Min(emails.Count, SendToHintsButts.Length);
+            for (int i = 0; i < SendToHintsButts.Length; i++) {
+                if (i < emails.Count) {
+                    SendToHintsLabels[i].Text = emails[i];
+                    SendToHintsLabels[i].Enabled = true;
+                    SendToHintsButts[i].Enabled = true;
+                } else {
+                    SendToHintsLabels[i].Enabled = false;
+                    SendToHintsButts[i].Enabled = false;
+                }
+            }
+
+            SendToHintBack.SetcustomSize(new Vector2(400, totalEmails * 50 + 10));
         }
-        
+    }
+
+    private void EmailSelectedFromHintList(int index) {
+        SendToInput.Text = SendToHintsLabels[index].Text;
+        SendToInput.Text = SendToInput.Text; //remove the modified flag
+        SendToHintsCont.Enabled = false;
     }
 
     public int FoldState {
