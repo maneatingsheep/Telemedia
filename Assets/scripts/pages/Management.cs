@@ -408,7 +408,7 @@ public class Management : MonoBehaviour {
         DebugLab = new SRGUILabel();
         DebugLab.Style = CommonAssetHolder.instance.GetCustomStyle(SendAllText);
         DebugLab.Text = "";
-        //cont.children.Add(DebugLab);
+        cont.children.Add(DebugLab);
 
 
         meetingPage = 0;
