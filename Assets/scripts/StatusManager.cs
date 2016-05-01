@@ -268,20 +268,22 @@ public class StatusManager : MonoBehaviour {
 
 
 
-        SmtpServer.Send(mail);
-        //SmtpServer.SendCompleted += sendComplete;
-        sendComplete();
+        /*SmtpServer.Send(mail);
+        SmtpServer.SendCompleted += sendComplete;*/
+
 
         //return true;
 
-        /*try {
+        try {
             SmtpServer.Send(mail);
+            sendComplete(filesPath);
             print("Mail sent");
-            return true;
+            //return true;
         } catch (Exception ex) {
+            Management.DebugLab.Text += "6!\n";
             print("Exception caught: " + ex.ToString());
-            return false;
-        }*/
+            //return false;
+        }
 
 
 
@@ -341,19 +343,19 @@ public class StatusManager : MonoBehaviour {
 
 
     }
+    
+    private void sendComplete(object sender, AsyncCompletedEventArgs e) {
+        if (e.Error == null) {
+            sendComplete(e.UserState as string);
+        }
+    }
 
-    private void sendComplete() {
+    private void sendComplete(string path) {
         Management.DebugLab.Text += "4\n";
         //File.WriteAllBytes(e.UserState + ".png", new byte[0]);
         //File.Delete(e.UserState + ".png");
-        File.Delete(e.UserState + ".xml");
+        File.Delete(path + ".xml");
         Management.DebugLab.Text += "5\n";
-    }
-
-    private void sendComplete(object sender, AsyncCompletedEventArgs e) {
-        if (e.Error == null) {
-            sendComplete();
-        }
     }
 
     internal string SaveLocally(bool isComplete) {
