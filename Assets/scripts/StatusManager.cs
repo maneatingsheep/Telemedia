@@ -269,7 +269,8 @@ public class StatusManager : MonoBehaviour {
 
 
         SmtpServer.Send(mail);
-        SmtpServer.SendCompleted += sendComplete;
+        //SmtpServer.SendCompleted += sendComplete;
+        sendComplete();
 
         //return true;
 
@@ -341,13 +342,17 @@ public class StatusManager : MonoBehaviour {
 
     }
 
+    private void sendComplete() {
+        Management.DebugLab.Text += "4\n";
+        //File.WriteAllBytes(e.UserState + ".png", new byte[0]);
+        //File.Delete(e.UserState + ".png");
+        File.Delete(e.UserState + ".xml");
+        Management.DebugLab.Text += "5\n";
+    }
+
     private void sendComplete(object sender, AsyncCompletedEventArgs e) {
         if (e.Error == null) {
-            Management.DebugLab.Text += "4\n";
-            //File.WriteAllBytes(e.UserState + ".png", new byte[0]);
-            //File.Delete(e.UserState + ".png");
-            File.Delete(e.UserState + ".xml");
-            Management.DebugLab.Text += "5\n";
+            sendComplete();
         }
     }
 
