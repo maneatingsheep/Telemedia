@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Net.Mail;
 using System.ComponentModel;
+using System.Threading;
 
 public class StatusManager : MonoBehaviour {
     
@@ -31,6 +32,9 @@ public class StatusManager : MonoBehaviour {
     private string SessionsFolderPath;
 
     private List<IStatusDependant> RegisteredPages = new List<IStatusDependant>();
+    private SmtpClient SmtpServer;
+    private MailMessage mail;
+    private string _filesPath;
 
     public void Init() {
 
@@ -223,7 +227,7 @@ public class StatusManager : MonoBehaviour {
 
         Management.DebugLab.Text += "1a\n";
 
-        MailMessage mail = new MailMessage();
+        mail = new MailMessage();
         Management.DebugLab.Text += "1b\n";
 
 
@@ -237,7 +241,7 @@ public class StatusManager : MonoBehaviour {
 
         //SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com", 587);
         //SmtpClient SmtpServer = new SmtpClient("smtp.mail.yahoo.com", 587);
-        SmtpClient SmtpServer = new SmtpClient("smtp.mail.yahoo.com");
+        SmtpServer = new SmtpClient("smtp.mail.yahoo.com");
 
         //SmtpServer.Port = 465;
         //SmtpServer.Port = 587;
@@ -265,8 +269,7 @@ public class StatusManager : MonoBehaviour {
 
         ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
         //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-
-
+        
 
         /*SmtpServer.Send(mail);
         SmtpServer.SendCompleted += sendComplete;*/
@@ -274,18 +277,12 @@ public class StatusManager : MonoBehaviour {
 
         //return true;
 
-        try {
-            SmtpServer.Send(mail);
-            sendComplete(filesPath);
-            print("Mail sent");
-            //return true;
-        } catch (Exception ex) {
-            Management.DebugLab.Text += "6!\n";
-            print("Exception caught: " + ex.ToString());
-            //return false;
-        }
 
-
+        _filesPath = filesPath;
+        Thread MailThread = new Thread(new ThreadStart(DoSendMail));
+        Management.Instance.IsSendingMail = true;
+        MailThread.Start();
+        
 
         /*body = body.Replace(new String((char)20, 1), "%20");
         body = body.Replace("\n", "%0D%0A");
@@ -343,7 +340,24 @@ public class StatusManager : MonoBehaviour {
 
 
     }
-    
+
+    private void DoSendMail() {
+        try {
+            SmtpServer.Send(mail);
+            sendComplete(_filesPath);
+            print("Mail sent");
+            //return true;
+        }
+        catch (Exception ex) {
+            Management.DebugLab.Text += "6!\n";
+            print("Exception caught: " + ex.ToString());
+            //return false;
+        }
+
+        Management.Instance.UpdateSessionsList(true);
+        Management.Instance.IsSendingMail = false;
+    }
+
     private void sendComplete(object sender, AsyncCompletedEventArgs e) {
         if (e.Error == null) {
             sendComplete(e.UserState as string);

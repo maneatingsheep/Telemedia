@@ -54,6 +54,7 @@ public class Management : MonoBehaviour {
     private SRGUITexture camTexture;
     private Texture2D photo;
 
+
     //end meeting
     public Texture2D HintBack;
     public Texture2D HintSingle;
@@ -90,7 +91,14 @@ public class Management : MonoBehaviour {
     private SRGUIButton SendAllButt;
     public Texture2D SendAllText;
 
+    //mail cover
+    private SRGUIContainer SendingMailCoverCont;
+    private SRGUITexture SendingMailCoverBack;
+    public Texture2D SendingMailCoverTexture;
+
     private const string DEFAULT_MAIL_ADRESS = "DefaultMailAdress";
+
+    public bool IsSendingMail = false;
 
     public Management() {
         Instance = this;
@@ -236,6 +244,7 @@ public class Management : MonoBehaviour {
         ClientDetailsCont.children.Add(SaveClientButt);
         camTexture = new SRGUITexture();
         camTexture.Position = new Vector2(0, 660);
+        
         ClientDetailsCont.children.Add(camTexture);
 
         //end meeting
@@ -403,12 +412,19 @@ public class Management : MonoBehaviour {
         SendAllButt.Position = new Vector2(290, 15);
         SendAllButt.GroupID = 0;
         UnsentSessionsCont.children.Add(SendAllButt);
+        
 
+        SendingMailCoverCont = new SRGUIContainer();
+        cont.children.Add(SendingMailCoverCont);
+        SendingMailCoverBack = new SRGUITexture();
+        SendingMailCoverBack.SetTexture(SendingMailCoverTexture);
+        SendingMailCoverCont.children.Add(SendingMailCoverBack);
+        SendingMailCoverCont.Enabled = false;
 
         DebugLab = new SRGUILabel();
         DebugLab.Style = CommonAssetHolder.instance.GetCustomStyle(SendAllText);
         DebugLab.Text = "";
-        cont.children.Add(DebugLab);
+        //cont.children.Add(DebugLab);
 
 
         meetingPage = 0;
@@ -416,7 +432,9 @@ public class Management : MonoBehaviour {
 
         FoldState = -1;
 
-    }
+        
+
+}
 
     private SRGUILabel GetHintTag(SRGUIInput targetInput, string targetText) {
         SRGUILabel retLabel = new SRGUILabel();
@@ -519,7 +537,6 @@ public class Management : MonoBehaviour {
                return;
             }
         }
-
     }
     
     private void ProcessEmailAdress() {
@@ -559,7 +576,7 @@ public class Management : MonoBehaviour {
         PlayerPrefs.SetString("UsedEmails", ToJSONEmails);
     }
 
-    private void UpdateSessionsList(bool fromFiles) {
+    public void UpdateSessionsList(bool fromFiles) {
         if (fromFiles) {
             CurrentSessions = StatusMgr.GetFileList();
         }
@@ -609,6 +626,17 @@ public class Management : MonoBehaviour {
 
         if (SendToInput.IsModified) {
             UpdateSuggestedEmails();
+        }
+
+        SendingMailCoverCont.Enabled = IsSendingMail;
+
+        if (webCamTexture.isPlaying) {
+            if (photo == null) {
+                photo = new Texture2D(webCamTexture.width, webCamTexture.height);
+            }
+            photo.SetPixels(webCamTexture.GetPixels());
+            photo.Apply();
+            camTexture.SetTexture(photo, new Vector2(300, 200), true);
         }
     }
 
@@ -673,7 +701,6 @@ public class Management : MonoBehaviour {
                     camTexture.SetTexture();
                 }
                 
-
                 webCamTexture.Stop();
             }
             switch (value) {
@@ -759,17 +786,13 @@ public class Management : MonoBehaviour {
     private void TakePicture() {
         if (webCamTexture.isPlaying) {
             
-            photo = new Texture2D(webCamTexture.width, webCamTexture.height);
-            photo.SetPixels(webCamTexture.GetPixels());
-            photo.Apply();
-
-            camTexture.SetTexture(photo, new Vector2(300, 200), true);
+            
+            
 
             webCamTexture.Stop();
         } else {
             
             webCamTexture.Play();
-            camTexture.SetTexture(webCamTexture, new Vector2(300, 200), true);
         }
         
     }

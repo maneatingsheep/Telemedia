@@ -30,7 +30,7 @@ public class SRGUIManager : MonoBehaviour {
     private float groupScale;
 
     public bool Enabled = false;
-
+    
     public SRGUIManager() {
         instance = this;
     }
