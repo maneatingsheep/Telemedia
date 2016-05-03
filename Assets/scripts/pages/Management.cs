@@ -50,10 +50,19 @@ public class Management : MonoBehaviour {
     private SRGUIButton SaveClientButt;
     public Texture ClientBackText;
 
+
+    //camera
+    private SRGUIContainer CameraContainer;
+    private SRGUITexture CameraBack;
+    private SRGUIButton CamerTake;
+    private SRGUIButton CameraCancel;
+    private SRGUIButton CameraFlip;
+    private SRGUIButton CameraClose;
+    public Texture2D[] CameraTextures;
     private WebCamTexture webCamTexture = new WebCamTexture();
     private SRGUITexture camTexture;
     private Texture2D photo;
-
+    private int cameraDeviceIndex;
 
     //end meeting
     public Texture2D HintBack;
@@ -99,6 +108,7 @@ public class Management : MonoBehaviour {
     private const string DEFAULT_MAIL_ADRESS = "DefaultMailAdress";
 
     public bool IsSendingMail = false;
+    
 
     public Management() {
         Instance = this;
@@ -145,8 +155,7 @@ public class Management : MonoBehaviour {
         ClientDetailsButt.Position = new Vector2(80, 140);
         ClientDetailsButt.setCustomSize(new Vector2(200, 50));
         cont.children.Add(ClientDetailsButt);
-
-
+        
         EndMeetingButt = new SRGUIButton();
         EndMeetingButt.GroupID = 0;
         EndMeetingButt.Style = CommonAssetHolder.instance.GetCustomStyle(CommonAssetHolder.FontNameType.ManagementTitle, 30);
@@ -242,10 +251,58 @@ public class Management : MonoBehaviour {
         SaveClientButt.setCustomSize(new Vector2(100, 30));
         SaveClientButt.Position = new Vector2(210, 470);
         ClientDetailsCont.children.Add(SaveClientButt);
-        camTexture = new SRGUITexture();
-        camTexture.Position = new Vector2(0, 660);
+
+
+        CameraContainer = new SRGUIContainer();
+        CameraContainer.Enabled = false;
+        CameraContainer.Position = new Vector2(600, 200);
+        cont.children.Add(CameraContainer);
+        CameraBack = new SRGUITexture();
+        CameraBack.SetTexture(CameraTextures[0]);
+        CameraContainer.children.Add(CameraBack);
+
+        CamerTake = new SRGUIButton();
+        CamerTake.GroupID = 0;
+        CamerTake.Position = new Vector2(600, 0);
+        CamerTake.Style = (new GUIStyle());
+        CamerTake.Style.normal.background = (CameraTextures[1]);
+        CameraContainer.children.Add(CamerTake);
+
+        CameraCancel = new SRGUIButton();
+        CameraCancel.GroupID = 0;
+        CameraCancel.Position = new Vector2(600, 150);
+        CameraCancel.Style = (new GUIStyle());
+        CameraCancel.Style.normal.background = (CameraTextures[2]);
+        CameraContainer.children.Add(CameraCancel);
+
+        CameraFlip = new SRGUIButton();
+        CameraFlip.GroupID = 0;
+        CameraFlip.Position = new Vector2(600, 300);
+        CameraFlip.Style = (new GUIStyle());
+        CameraFlip.Style.normal.background = (CameraTextures[3]);
+        CameraContainer.children.Add(CameraFlip);
+
+        CameraClose = new SRGUIButton();
+        CameraClose.GroupID = 0;
+        CameraClose.Position = new Vector2(600, 450);
+        CameraClose.Style = (new GUIStyle());
+        CameraClose.Style.normal.background = (CameraTextures[4]);
+        CameraContainer.children.Add(CameraClose);
         
-        ClientDetailsCont.children.Add(camTexture);
+        webCamTexture = new WebCamTexture();
+        
+        camTexture = new SRGUITexture();
+        camTexture.Position = new Vector2(50, 50);
+        CameraContainer.children.Add(camTexture);
+
+        if (WebCamTexture.devices.Length > 1) {
+            CameraFlip.Enabled = true;
+            cameraDeviceIndex = 0;
+            webCamTexture.deviceName = WebCamTexture.devices[cameraDeviceIndex].name;
+        } else {
+            CameraFlip.Enabled = false;
+        }
+
 
         //end meeting
         EndMeetingCont = new SRGUIContainer();
@@ -512,7 +569,39 @@ public class Management : MonoBehaviour {
             return;
         }
         if (caller == TakePictureButt) {
-            TakePicture();
+            CameraContainer.Enabled = !CameraContainer.Enabled;
+            if (CameraContainer.Enabled) {
+                webCamTexture.Play();
+            }
+            CamerTake.Enabled = true;
+            CameraCancel.Enabled = false;
+            CameraFlip.Enabled = WebCamTexture.devices.Length > 1;
+            return;
+        }
+        if (caller == CamerTake) {
+            webCamTexture.Stop();
+            CamerTake.Enabled = false;
+            CameraCancel.Enabled = true;
+            CameraFlip.Enabled = false;
+        }
+        if (caller == CameraCancel) {
+            webCamTexture.Play();
+            CamerTake.Enabled = true;
+            CameraCancel.Enabled = false;
+            CameraFlip.Enabled = WebCamTexture.devices.Length > 1;
+            return;
+        }
+        if (caller == CameraFlip) {
+            cameraDeviceIndex = (cameraDeviceIndex + 1) % WebCamTexture.devices.Length;
+            webCamTexture.deviceName = WebCamTexture.devices[cameraDeviceIndex].name;
+            return;
+        }
+        if (caller == CameraClose) {
+            CameraContainer.Enabled = false;
+            if (webCamTexture.isPlaying) {
+                webCamTexture.Stop();
+                photo = null;
+            }
             return;
         }
         if (caller == SendAllButt) {
@@ -693,14 +782,8 @@ public class Management : MonoBehaviour {
             return _FoldState;
         }
         set {
-            if (webCamTexture.isPlaying) {
-                
-                if (photo != null) {
-                    camTexture.SetTexture(photo, new Vector2(300, 200), true);
-                } else {
-                    camTexture.SetTexture();
-                }
-                
+            CameraContainer.Enabled = false;
+            if (webCamTexture.isPlaying) {                
                 webCamTexture.Stop();
             }
             switch (value) {
@@ -781,20 +864,6 @@ public class Management : MonoBehaviour {
         }
         
         StatusMgr.SetClientDetails(details);
-    }
-
-    private void TakePicture() {
-        if (webCamTexture.isPlaying) {
-            
-            
-            
-
-            webCamTexture.Stop();
-        } else {
-            
-            webCamTexture.Play();
-        }
-        
     }
 
     private void RefreshClientDetails() {

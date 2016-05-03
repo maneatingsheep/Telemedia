@@ -44,12 +44,21 @@ MonoBehaviour:
   TransparentText: {fileID: 0}
   IsOpen: 0
   ClientBackText: {fileID: 2800000, guid: f62a2636714dec64385c546476a4e014, type: 3}
+  CameraTextures:
+  - {fileID: 2800000, guid: b8274c7dae416674c90a12cb4fd87de1, type: 3}
+  - {fileID: 2800000, guid: cd7848288100cea489a05bcb7f06f134, type: 3}
+  - {fileID: 2800000, guid: f03bfc7f58f9194458e2f1f6e84c3dc2, type: 3}
+  - {fileID: 2800000, guid: c6f4272486d29cc41858ea0f729417f1, type: 3}
+  - {fileID: 2800000, guid: 4551e4c389c145b408fb936369db7b3c, type: 3}
   HintBack: {fileID: 2800000, guid: 7b363f746e5336745a92f4f3022cf60c, type: 3}
   HintSingle: {fileID: 2800000, guid: 8b8183940a1038e4095c9ff94796f9c8, type: 3}
   MeetingBackText: {fileID: 2800000, guid: 283f8b48b315a2043a8a58e1c93a8804, type: 3}
   LastSessionTexture: {fileID: 2800000, guid: 98868cb5c09ff024bb7e410ef62a2500, type: 3}
   DotTexture: {fileID: 2800000, guid: 662f3cbf270b64d46b2dfb5ea5fb9cb9, type: 3}
   SendAllText: {fileID: 2800000, guid: f7bebe72be4078d4cb5f70ae0ce1c5a8, type: 3}
+  SendingMailCoverTexture: {fileID: 2800000, guid: d4f2ca58f81dd4c44824369ac92a0611,
+    type: 3}
+  IsSendingMail: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
