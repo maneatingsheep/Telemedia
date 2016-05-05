@@ -104,11 +104,16 @@ public class Management : MonoBehaviour {
     private SRGUIContainer SendingMailCoverCont;
     private SRGUITexture SendingMailCoverBack;
     public Texture2D SendingMailCoverTexture;
+    //private SRGUITexture SendingMailCoverSpin;
+    public Texture2D SendingMailSpinTexture;
 
     private const string DEFAULT_MAIL_ADRESS = "DefaultMailAdress";
 
     public bool IsSendingMail = false;
-    
+
+    private float globalScale = 1.3f;
+    private float itemsVerticalOffset = -50;
+
 
     public Management() {
         Instance = this;
@@ -119,11 +124,13 @@ public class Management : MonoBehaviour {
         StatusMgr = StatusManager.Instance;
 
         cont = new SRGUIContainer();
-        
+        cont.Scale = new Vector2(globalScale, globalScale);
+
+
         slider = new SRGUIButton();
         slider.GroupID = 0;
         slider.Style = CommonAssetHolder.instance.GetCustomStyle(SliderTtexture, CommonAssetHolder.FontNameType.FrutiGray, 10);
-        slider.Position = new Vector2(BGTtexture.width + 10, 0);
+        slider.Position = new Vector2(BGTtexture.width + 6, -10);
         cont.children.Add(slider);
 
         SRGUIManager.instance.Click += ClickReaction;
@@ -133,7 +140,7 @@ public class Management : MonoBehaviour {
         cont.children.Add(bgTexture);
 
 
-        cont.Position = new Vector2(-BGTtexture.width, 0);
+        cont.Position = new Vector2(-BGTtexture.width * globalScale, 0);
         SRGUIManager.instance.RegisterGUIElement(cont, gameObject);
 
         //meeting summary
@@ -141,7 +148,7 @@ public class Management : MonoBehaviour {
         MeetingSummaryButt.GroupID = 0; 
         MeetingSummaryButt.Style = CommonAssetHolder.instance.GetCustomStyle(CommonAssetHolder.FontNameType.ManagementTitle, 30);
         MeetingSummaryButt.Text = "Meeting Summary";
-        MeetingSummaryButt.Position = new Vector2(80, 80);
+        MeetingSummaryButt.Position = new Vector2(80, 80 + itemsVerticalOffset);
         MeetingSummaryButt.setCustomSize(new Vector2(250, 50));
         MeetingSummaryButt.destination = "meetingSummary";
         cont.children.Add(MeetingSummaryButt);
@@ -152,7 +159,7 @@ public class Management : MonoBehaviour {
         ClientDetailsButt.GroupID = 0;
         ClientDetailsButt.Style = CommonAssetHolder.instance.GetCustomStyle(CommonAssetHolder.FontNameType.ManagementTitle, 30);
         ClientDetailsButt.Text = "Client Details";
-        ClientDetailsButt.Position = new Vector2(80, 140);
+        ClientDetailsButt.Position = new Vector2(80, 140 + itemsVerticalOffset);
         ClientDetailsButt.setCustomSize(new Vector2(200, 50));
         cont.children.Add(ClientDetailsButt);
         
@@ -160,7 +167,7 @@ public class Management : MonoBehaviour {
         EndMeetingButt.GroupID = 0;
         EndMeetingButt.Style = CommonAssetHolder.instance.GetCustomStyle(CommonAssetHolder.FontNameType.ManagementTitle, 30);
         EndMeetingButt.Text = "End Meeting";
-        EndMeetingButt.InPosition = new Vector2(80, 200);
+        EndMeetingButt.InPosition = new Vector2(80, 200 + itemsVerticalOffset);
         EndMeetingButt.setCustomSize(new Vector2(200, 50));
         cont.children.Add(EndMeetingButt);
 
@@ -168,7 +175,7 @@ public class Management : MonoBehaviour {
         LastMeetingsButt.GroupID = 0;
         LastMeetingsButt.Style = CommonAssetHolder.instance.GetCustomStyle(CommonAssetHolder.FontNameType.ManagementTitle, 30);
         LastMeetingsButt.Text = "Last Meetings";
-        LastMeetingsButt.InPosition = new Vector2(80, 260);
+        LastMeetingsButt.InPosition = new Vector2(80, 260 + itemsVerticalOffset);
         LastMeetingsButt.setCustomSize(new Vector2(200, 50));
         cont.children.Add(LastMeetingsButt);
 
@@ -183,7 +190,7 @@ public class Management : MonoBehaviour {
         ClientDetailsCont = new SRGUIContainer();
         cont.children.Add(ClientDetailsCont);
         ClientDetailsCont.Alpha = 0;
-        ClientDetailsCont.Position = new Vector2(45, 210);
+        ClientDetailsCont.Position = new Vector2(45, 210 + itemsVerticalOffset);
         
         SRGUITexture clientBackText = new SRGUITexture();
         clientBackText.SetTexture(ClientBackText);
@@ -255,7 +262,7 @@ public class Management : MonoBehaviour {
 
         CameraContainer = new SRGUIContainer();
         CameraContainer.Enabled = false;
-        CameraContainer.Position = new Vector2(600, 200);
+        CameraContainer.Position = new Vector2(500, 100);
         cont.children.Add(CameraContainer);
         CameraBack = new SRGUITexture();
         CameraBack.SetTexture(CameraTextures[0]);
@@ -263,28 +270,28 @@ public class Management : MonoBehaviour {
 
         CamerTake = new SRGUIButton();
         CamerTake.GroupID = 0;
-        CamerTake.Position = new Vector2(600, 0);
+        CamerTake.Position = new Vector2(420, 540);
         CamerTake.Style = (new GUIStyle());
         CamerTake.Style.normal.background = (CameraTextures[1]);
         CameraContainer.children.Add(CamerTake);
 
         CameraCancel = new SRGUIButton();
         CameraCancel.GroupID = 0;
-        CameraCancel.Position = new Vector2(600, 150);
+        CameraCancel.Position = new Vector2(20, 550);
         CameraCancel.Style = (new GUIStyle());
         CameraCancel.Style.normal.background = (CameraTextures[2]);
         CameraContainer.children.Add(CameraCancel);
 
         CameraFlip = new SRGUIButton();
         CameraFlip.GroupID = 0;
-        CameraFlip.Position = new Vector2(600, 300);
+        CameraFlip.Position = new Vector2(600, 550);
         CameraFlip.Style = (new GUIStyle());
         CameraFlip.Style.normal.background = (CameraTextures[3]);
         CameraContainer.children.Add(CameraFlip);
 
         CameraClose = new SRGUIButton();
         CameraClose.GroupID = 0;
-        CameraClose.Position = new Vector2(600, 450);
+        CameraClose.Position = new Vector2(800, 560);
         CameraClose.Style = (new GUIStyle());
         CameraClose.Style.normal.background = (CameraTextures[4]);
         CameraContainer.children.Add(CameraClose);
@@ -292,7 +299,7 @@ public class Management : MonoBehaviour {
         webCamTexture = new WebCamTexture();
         
         camTexture = new SRGUITexture();
-        camTexture.Position = new Vector2(50, 50);
+        camTexture.Position = new Vector2(20, 20);
         CameraContainer.children.Add(camTexture);
 
         if (WebCamTexture.devices.Length > 1) {
@@ -306,7 +313,7 @@ public class Management : MonoBehaviour {
 
         //end meeting
         EndMeetingCont = new SRGUIContainer();
-        EndMeetingCont.Position = new Vector2(40, 245);
+        EndMeetingCont.Position = new Vector2(40, 245 + itemsVerticalOffset);
         EndMeetingCont.Alpha = 0;
         cont.children.Add(EndMeetingCont);
 
@@ -388,7 +395,7 @@ public class Management : MonoBehaviour {
         //last meetings
 
         LastSessionsCont = new SRGUIContainer();
-        LastSessionsCont.Position = new Vector2(40, 360);
+        LastSessionsCont.Position = new Vector2(20, 300 + itemsVerticalOffset);
         LastSessionsCont.Alpha = 0;
         cont.children.Add(LastSessionsCont);
 
@@ -473,10 +480,20 @@ public class Management : MonoBehaviour {
 
         SendingMailCoverCont = new SRGUIContainer();
         cont.children.Add(SendingMailCoverCont);
+        SendingMailCoverCont.Scale = new Vector2(1, 1) / globalScale;
+        SendingMailCoverCont.Enabled = false;
+
         SendingMailCoverBack = new SRGUITexture();
         SendingMailCoverBack.SetTexture(SendingMailCoverTexture);
         SendingMailCoverCont.children.Add(SendingMailCoverBack);
-        SendingMailCoverCont.Enabled = false;
+
+        /*SendingMailCoverSpin = new SRGUITexture();
+        SendingMailCoverSpin.SetTexture(SendingMailSpinTexture);
+        SendingMailCoverSpin.Position = new Vector2(960, 540);
+        SendingMailCoverSpin.Axis = new Vector2(166, 93);
+        SendingMailCoverCont.children.Add(SendingMailCoverSpin);*/
+
+        
 
         DebugLab = new SRGUILabel();
         DebugLab.Style = CommonAssetHolder.instance.GetCustomStyle(SendAllText);
@@ -509,7 +526,7 @@ public class Management : MonoBehaviour {
         if ((caller == slider) || (caller == MeetingSummaryButt)) {
             //IsMouseDown = true;
             IsOpen = !IsOpen;
-            HOTween.To(cont, 0.4f, new TweenParms().Prop("Position", new Vector2((IsOpen) ? 0 : -BGTtexture.width, 0)));
+            HOTween.To(cont, 0.4f, new TweenParms().Prop("Position", new Vector2((IsOpen) ? 0 : -BGTtexture.width * globalScale, 0)));
 
             if (!IsOpen) {
                 FoldState = -1;
@@ -725,8 +742,10 @@ public class Management : MonoBehaviour {
             }
             photo.SetPixels(webCamTexture.GetPixels());
             photo.Apply();
-            camTexture.SetTexture(photo, new Vector2(300, 200), true);
+            camTexture.SetTexture(photo, new Vector2(860, 600), true);
         }
+
+        //SendingMailCoverSpin.Position
     }
 
     private void UpdateSuggestedEmails() {
