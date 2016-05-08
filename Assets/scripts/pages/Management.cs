@@ -82,7 +82,7 @@ public class Management : MonoBehaviour {
     
     //last meetings
     private SRGUIContainer LastSessionsCont;
-    private const int TotalMettingFields = 5;
+    private const int TotalMettingFields = 4;
     private SRGUIContainer[] SessionDescriptionConts;
     private SRGUIButton[] ReopenExistingMeetingButts;
     private SRGUILabel[] SessionDescriptionLabels;
@@ -432,7 +432,7 @@ public class Management : MonoBehaviour {
         NextPageButt.Style = CommonAssetHolder.instance.GetCustomStyle(CommonAssetHolder.FontNameType.ManagementTitle, 30);
         NextPageButt.Text = "Next";
         NextPageButt.setCustomSize(new Vector2(100, 40));
-        NextPageButt.Position = new Vector2(200, 500);
+        NextPageButt.Position = new Vector2(200, 450);
         LastSessionsCont.children.Add(NextPageButt);
 
         PrevPageButt = new SRGUIButton();
@@ -440,17 +440,17 @@ public class Management : MonoBehaviour {
         PrevPageButt.Style = CommonAssetHolder.instance.GetCustomStyle(CommonAssetHolder.FontNameType.ManagementTitle, 30);
         PrevPageButt.Text = "Prev";
         PrevPageButt.setCustomSize(new Vector2(100, 40));
-        PrevPageButt.Position = new Vector2(30, 500);
+        PrevPageButt.Position = new Vector2(30, 450);
         LastSessionsCont.children.Add(PrevPageButt);
 
         PageLabel = new SRGUILabel();
         PageLabel.Style = CommonAssetHolder.instance.GetCustomStyle(CommonAssetHolder.FontNameType.ManagementTitle, 30);
-        PageLabel.Position = new Vector2(120, 500);
+        PageLabel.Position = new Vector2(120, 450);
         LastSessionsCont.children.Add(PageLabel);
 
 
         UnsentSessionsCont = new SRGUIContainer();
-        UnsentSessionsCont.InPosition = new Vector2(0, 315);
+        UnsentSessionsCont.InPosition = new Vector2(0, 310 + itemsVerticalOffset);
 
         SRGUITexture unsetDotTexture = new SRGUITexture();
         unsetDotTexture.SetTexture(DotTexture);
@@ -821,7 +821,7 @@ public class Management : MonoBehaviour {
                 HOTween.To(LastSessionsCont, 0.4f, "Alpha", 0);
                 break;
             case 0:
-                float shift = 545;
+                float shift = 500;
 
                 HOTween.To(EndMeetingButt, 0.4f, "Position", EndMeetingButt.InPosition + new Vector2(0, shift));
                 HOTween.To(LastMeetingsButt, 0.4f, "Position", LastMeetingsButt.InPosition + new Vector2(0, shift));
@@ -847,7 +847,7 @@ public class Management : MonoBehaviour {
                 HOTween.To(LastSessionsCont, 0.4f, "Alpha", 0);
                 break;
             case 2:
-                shift = 590;
+                shift = 500;
 
                 HOTween.To(EndMeetingButt, 0.4f, "Position", EndMeetingButt.InPosition);
                 HOTween.To(LastMeetingsButt, 0.4f, "Position", LastMeetingsButt.InPosition);
