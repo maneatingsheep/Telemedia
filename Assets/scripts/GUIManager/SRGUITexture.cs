@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class SRGUITexture : SRBaseGUIElement {
 
@@ -50,4 +51,5 @@ public class SRGUITexture : SRBaseGUIElement {
             return _Texture;
         }
     }
+    
 }

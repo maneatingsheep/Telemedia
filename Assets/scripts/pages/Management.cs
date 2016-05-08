@@ -59,7 +59,7 @@ public class Management : MonoBehaviour {
     private SRGUIButton CameraFlip;
     private SRGUIButton CameraClose;
     public Texture2D[] CameraTextures;
-    private WebCamTexture webCamTexture = new WebCamTexture();
+    private WebCamTexture webCamTexture;
     private SRGUITexture camTexture;
     private Texture2D photo;
     private int cameraDeviceIndex;
@@ -113,7 +113,7 @@ public class Management : MonoBehaviour {
 
     private float globalScale = 1.3f;
     private float itemsVerticalOffset = -50;
-
+    private Vector2 CamTextureSize = new Vector2(860, 500);
 
     public Management() {
         Instance = this;
@@ -296,7 +296,7 @@ public class Management : MonoBehaviour {
         CameraClose.Style.normal.background = (CameraTextures[4]);
         CameraContainer.children.Add(CameraClose);
         
-        webCamTexture = new WebCamTexture();
+        webCamTexture = new WebCamTexture((int)CamTextureSize.x, (int)CamTextureSize.y);
         
         camTexture = new SRGUITexture();
         camTexture.Position = new Vector2(20, 20);
@@ -742,7 +742,7 @@ public class Management : MonoBehaviour {
             }
             photo.SetPixels(webCamTexture.GetPixels());
             photo.Apply();
-            camTexture.SetTexture(photo, new Vector2(860, 600), true);
+            camTexture.SetTexture(photo, CamTextureSize, true);
         }
 
         //SendingMailCoverSpin.Position
