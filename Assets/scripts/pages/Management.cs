@@ -113,7 +113,6 @@ public class Management : MonoBehaviour {
 
     private float globalScale = 1.3f;
     private float itemsVerticalOffset = -50;
-    private Vector2 CamTextureSize = new Vector2(860, 2000);
 
     public Management() {
         Instance = this;
@@ -296,7 +295,7 @@ public class Management : MonoBehaviour {
         CameraClose.Style.normal.background = (CameraTextures[4]);
         CameraContainer.children.Add(CameraClose);
         
-        webCamTexture = new WebCamTexture();
+        webCamTexture = new WebCamTexture((int)CameraContainer.Size.x, (int)CameraContainer.Size.y - 200);
         
         camTexture = new SRGUITexture();
         camTexture.Position = new Vector2(20, 20);
@@ -611,6 +610,8 @@ public class Management : MonoBehaviour {
         if (caller == CameraFlip) {
             cameraDeviceIndex = (cameraDeviceIndex + 1) % WebCamTexture.devices.Length;
             webCamTexture.deviceName = WebCamTexture.devices[cameraDeviceIndex].name;
+            webCamTexture.Play();
+            photo = null;
             return;
         }
         if (caller == CameraClose) {
@@ -735,15 +736,18 @@ public class Management : MonoBehaviour {
         }
 
         SendingMailCoverCont.Enabled = IsSendingMail;
-
+        
         if (webCamTexture.isPlaying && webCamTexture.width > 100) {
+
+            float minrat = Math.Min((CameraContainer.Size.x - 40) / webCamTexture.width, (CameraContainer.Size.y - 160) / webCamTexture.height);
+
             if (photo == null) {
                 photo = new Texture2D(webCamTexture.width, webCamTexture.height);
             }
             photo.SetPixels(webCamTexture.GetPixels());
             photo.Apply();
-            camTexture.SetTexture(photo, CamTextureSize, true);
-            camTexture.Position = new Vector2(20 + (CamTextureSize.x - Math.Min(webCamTexture.width, CamTextureSize.x)) / 2 , 20);
+            camTexture.SetTexture(photo, new Vector2((int)(webCamTexture.width * minrat), (int)(webCamTexture.height * minrat)));
+            camTexture.Position = new Vector2(20 + (CameraContainer.Size.x - Math.Min(camTexture.Size.x, CameraContainer.Size.x)) / 2 , 20);
         }
 
         //SendingMailCoverSpin.Position
