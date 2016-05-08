@@ -113,7 +113,7 @@ public class Management : MonoBehaviour {
 
     private float globalScale = 1.3f;
     private float itemsVerticalOffset = -50;
-    private Vector2 CamTextureSize = new Vector2(860, 500);
+    private Vector2 CamTextureSize = new Vector2(1000, 500);
 
     public Management() {
         Instance = this;
@@ -736,13 +736,14 @@ public class Management : MonoBehaviour {
 
         SendingMailCoverCont.Enabled = IsSendingMail;
 
-        if (webCamTexture.isPlaying) {
+        if (webCamTexture.isPlaying && webCamTexture.width > 100) {
             if (photo == null) {
                 photo = new Texture2D(webCamTexture.width, webCamTexture.height);
             }
             photo.SetPixels(webCamTexture.GetPixels());
             photo.Apply();
             camTexture.SetTexture(photo, CamTextureSize, true);
+            camTexture.Position = new Vector2((CamTextureSize.x - webCamTexture.width) / 2 + 20, 20);
         }
 
         //SendingMailCoverSpin.Position
