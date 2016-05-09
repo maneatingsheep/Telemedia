@@ -611,8 +611,9 @@ public class Management : MonoBehaviour {
             webCamTexture.Stop();
             cameraDeviceIndex = (cameraDeviceIndex + 1) % WebCamTexture.devices.Length;
             webCamTexture.deviceName = WebCamTexture.devices[cameraDeviceIndex].name;
-            webCamTexture.Play();
             photo = null;
+            webCamTexture.Play();
+            
             return;
         }
         if (caller == CameraClose) {
@@ -742,7 +743,7 @@ public class Management : MonoBehaviour {
 
             float minrat = Math.Min((CameraContainer.Size.x - 40) / webCamTexture.width, (CameraContainer.Size.y - 160) / webCamTexture.height);
 
-            if (photo == null) {
+            if (photo == null || photo.width != webCamTexture.width || photo.height != webCamTexture.height) {
                 photo = new Texture2D(webCamTexture.width, webCamTexture.height);
             }
             photo.SetPixels(webCamTexture.GetPixels());
