@@ -295,7 +295,7 @@ public class Management : MonoBehaviour {
         CameraClose.Style.normal.background = (CameraTextures[4]);
         CameraContainer.children.Add(CameraClose);
         
-        webCamTexture = new WebCamTexture((int)CameraContainer.Size.x, (int)CameraContainer.Size.y - 200);
+        webCamTexture = new WebCamTexture((int)CameraBack.Size.x, (int)CameraBack.Size.y - 200);
         
         camTexture = new SRGUITexture();
         camTexture.Position = new Vector2(20, 20);
@@ -611,6 +611,7 @@ public class Management : MonoBehaviour {
             webCamTexture.Stop();
             cameraDeviceIndex = (cameraDeviceIndex + 1) % WebCamTexture.devices.Length;
             webCamTexture.deviceName = WebCamTexture.devices[cameraDeviceIndex].name;
+            camTexture.SetTexture();
             photo = null;
             webCamTexture.Play();
             
@@ -620,6 +621,7 @@ public class Management : MonoBehaviour {
             CameraContainer.Enabled = false;
             if (webCamTexture.isPlaying) {
                 webCamTexture.Stop();
+                camTexture.SetTexture();
                 photo = null;
             }
             return;
@@ -741,15 +743,15 @@ public class Management : MonoBehaviour {
         
         if (webCamTexture.isPlaying && webCamTexture.width > 100) {
 
-            float minrat = Math.Min((CameraContainer.Size.x - 40) / webCamTexture.width, (CameraContainer.Size.y - 160) / webCamTexture.height);
+            float minrat = Math.Min((CameraBack.Size.x - 40) / webCamTexture.width, (CameraBack.Size.y - 160) / webCamTexture.height);
 
-            if (photo == null || photo.width != webCamTexture.width || photo.height != webCamTexture.height) {
+            if ((photo == null) || (photo.width != webCamTexture.width) || (photo.height != webCamTexture.height)) {
                 photo = new Texture2D(webCamTexture.width, webCamTexture.height);
+                camTexture.SetTexture(photo, new Vector2((int)(webCamTexture.width * minrat), (int)(webCamTexture.height * minrat)));
             }
             photo.SetPixels(webCamTexture.GetPixels());
             photo.Apply();
-            camTexture.SetTexture(photo, new Vector2((int)(webCamTexture.width * minrat), (int)(webCamTexture.height * minrat)));
-            camTexture.Position = new Vector2(20 + (CameraContainer.Size.x - Math.Min(camTexture.Size.x, CameraContainer.Size.x)) / 2 , 20);
+            camTexture.Position = new Vector2(20 + (CameraBack.Size.x - Math.Min(camTexture.Size.x, CameraBack.Size.x)) / 2 , 20);
         }
 
         //SendingMailCoverSpin.Position

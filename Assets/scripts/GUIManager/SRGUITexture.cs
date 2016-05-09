@@ -28,6 +28,7 @@ public class SRGUITexture : SRBaseGUIElement {
 
     public void SetTexture() {
         _Texture = null;
+        hasCoords = false;
     }
 
     public void SetTexture(Texture texture, Vector2 size, bool fitToSize = false) {
