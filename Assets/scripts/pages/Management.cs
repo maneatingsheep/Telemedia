@@ -608,6 +608,7 @@ public class Management : MonoBehaviour {
             return;
         }
         if (caller == CameraFlip) {
+            webCamTexture.Stop();
             cameraDeviceIndex = (cameraDeviceIndex + 1) % WebCamTexture.devices.Length;
             webCamTexture.deviceName = WebCamTexture.devices[cameraDeviceIndex].name;
             webCamTexture.Play();
