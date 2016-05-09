@@ -587,7 +587,7 @@ public class Management : MonoBehaviour {
         if (caller == TakePictureButt) {
             CameraContainer.Enabled = !CameraContainer.Enabled;
             if (CameraContainer.Enabled) {
-                webCamTexture.Play();
+                StartCamera(false);
             }
             CamerTake.Enabled = true;
             CameraCancel.Enabled = false;
@@ -601,7 +601,7 @@ public class Management : MonoBehaviour {
             CameraFlip.Enabled = false;
         }
         if (caller == CameraCancel) {
-            webCamTexture.Play();
+            StartCamera(false);
             CamerTake.Enabled = true;
             CameraCancel.Enabled = false;
             CameraFlip.Enabled = WebCamTexture.devices.Length > 1;
@@ -609,12 +609,7 @@ public class Management : MonoBehaviour {
         }
         if (caller == CameraFlip) {
             webCamTexture.Stop();
-            cameraDeviceIndex = (cameraDeviceIndex + 1) % WebCamTexture.devices.Length;
-            webCamTexture = new WebCamTexture((int)CameraBack.Size.x, (int)CameraBack.Size.y - 200);
-            webCamTexture.deviceName = WebCamTexture.devices[cameraDeviceIndex].name;
-            camTexture.SetTexture();
-            photo = null;
-            webCamTexture.Play();
+            StartCamera(true);
             
             return;
         }
@@ -651,6 +646,17 @@ public class Management : MonoBehaviour {
         }
     }
     
+    private void StartCamera(bool changeDevice) {
+        if (changeDevice) {
+            cameraDeviceIndex = (cameraDeviceIndex + 1) % WebCamTexture.devices.Length;
+        }
+        webCamTexture = new WebCamTexture((int)CameraBack.Size.x, (int)CameraBack.Size.y - 200);
+        webCamTexture.deviceName = WebCamTexture.devices[cameraDeviceIndex].name;
+        camTexture.SetTexture();
+        photo = null;
+        webCamTexture.Play();
+    }
+
     private void ProcessEmailAdress() {
         
         if (RememberMeCheck.Checked) {
