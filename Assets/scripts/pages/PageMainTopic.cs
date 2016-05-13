@@ -242,7 +242,7 @@ public class PageMainTopic : BasePage {
             CentralObject.transform.parent = this.transform;
             //HOTween.To(CentralObject.transform, 0.6f, new TweenParms().Prop("localPosition", new Vector3(0.373f, 0.009f, 12.32f)).Delay(0.2f));
 
-            HOTween.To(CentralObject.transform, 0.6f, new TweenParms().Prop("localPosition", SelectedItemInPosition).Delay(0.2f));
+            HOTween.To(CentralObject.transform, 0.6f, new TweenParms().Prop("localPosition", SelectedItemInPosition[SelectedFlatTransition]).Delay(0.2f));
             
             unloadFlatTransitionAssets();
 
