@@ -3,6 +3,7 @@ using System.Collections;
 using Holoville.HOTween;
 using System.Xml;
 using System.Collections.Generic;
+using System;
 
 public class PageMainTopic : BasePage {
 
@@ -47,12 +48,12 @@ public class PageMainTopic : BasePage {
 
         SelectedItemInPosition = new Vector3[6];
         //SelectedItemInPosition = new Vector3(0.1683824f, -0.05769891f, 11.72f);
-        SelectedItemInPosition[0] = new Vector3(0.185f, -0.06f, 12.25f);//limo
+        SelectedItemInPosition[0] = new Vector3(0.16f, -0.043f, 11.79f);//limo
         SelectedItemInPosition[1] = new Vector3(0.31f, 0.04f, 11.8f);//stamp
-        SelectedItemInPosition[2] = new Vector3(0.146f, -0.065f, 12.237f);//knife
-        SelectedItemInPosition[3] = new Vector3(0.345f, -0.044f, 11.865f);//system
-        SelectedItemInPosition[4] = new Vector3(0.361f, -0.053f, 12.078f);//cabin
-        SelectedItemInPosition[5] = new Vector3(0.255f, -0.06f, 12.606f);//paint
+        SelectedItemInPosition[2] = new Vector3(0.139f, -0.017f, 11.8f);//knife
+        SelectedItemInPosition[3] = new Vector3(0.345f, -0.044f, 11.857f);//system
+        SelectedItemInPosition[4] = new Vector3(0.31f, -0.03f, 11.79f);//cabin
+        SelectedItemInPosition[5] = new Vector3(0.177f, -0.055f, 11.78f);//paint
 
         //back butt
         createStandardBack();
@@ -226,7 +227,7 @@ public class PageMainTopic : BasePage {
     }
 
 
-    override public void DoEnter(float previousDelay, Object extraParams, string extraData = null) {
+    override public void DoEnter(float previousDelay, UnityEngine.Object extraParams, string extraData = null) {
         float FlatTransitionDelay = ((extraData == null) ? 0 : 0.8f);
 
         SideMenuTransitionData.InDelay = 0.2f + FlatTransitionDelay;
@@ -249,6 +250,7 @@ public class PageMainTopic : BasePage {
         } else {
             FlatTransitionTexture.SetTexture(FlatTransitionSeq[SelectedFlatTransition][0]);
             FlatTransitionTexture.Enabled = true;
+            FlatTransitionTexture.Alpha = 1;
             FlatTransitionTime = 0;
             FlatTransitionFrame = 0;
             FlatTransitionPlaying = true;
@@ -311,20 +313,30 @@ public class PageMainTopic : BasePage {
                     FlatTransitionFrame = frame;
                 } else {
                     //Resources.UnloadUnusedAssets();
+                    //HOTween.To(FlatTransitionTexture, 0.1f, new TweenParms().Prop("Alpha", 0).Ease(EaseType.Linear).Delay(0.075f).OnComplete(TransitionFadeComplete));
                     FlatTransitionTexture.Enabled = false;
                     FlatTransitionPlaying = false;
                     unloadFlatTransitionAssets();
 
                     CentralObject.transform.parent = this.transform;
 
+                    CentralObject.GetComponent<Renderer>().material.color = AlphaColorOpaque;
+                    //CentralObject.GetComponent<Renderer>().material.color = AlphaColorTransparent;
+
                     CentralObject.transform.localPosition = SelectedItemInPosition[SelectedFlatTransition];
                     CentralObject.transform.rotation = Quaternion.Euler(0, 2.32194f, 0);
                     CentralObject.transform.localScale = new Vector3(1.342f, 1.2f, 1.1f);
-                    CentralObject.GetComponent<Renderer>().material.color = AlphaColorOpaque;
 
+                    //HOTween.To(CentralObject.GetComponent<Renderer>().material, 0.1f, new TweenParms().Prop("color", AlphaColorOpaque).Ease(EaseType.Linear).OnComplete(TransitionFadeComplete));
                 }
             }
         }
+    }
+
+
+    
+    private void TransitionFadeComplete() {
+        FlatTransitionTexture.Enabled = false;
     }
 
     private void unloadFlatTransitionAssets() {
