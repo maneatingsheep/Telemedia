@@ -233,7 +233,13 @@ MonoBehaviour:
   MainMenuSpin: {fileID: 8300000, guid: 74f0690ed1ab55f449fd93114b646bba, type: 3}
   GalleryPopUp: {fileID: 8300000, guid: a200fca5bd366574b8b421764eef54da, type: 3}
   Checklist: {fileID: 8300000, guid: e1371507464d6984ca3b8b3a462f69de, type: 3}
-  Transformation: {fileID: 8300000, guid: 3833dcba604401142bd3df7cd16e2e10, type: 3}
+  Transformations:
+  - {fileID: 8300000, guid: 9266181813dd3eb49a65e5fe99a68fee, type: 3}
+  - {fileID: 8300000, guid: f83c10bbcb00c5047b6171e99a9da52d, type: 3}
+  - {fileID: 8300000, guid: 76eb6ee35bcbceb499afde7298ca0e7e, type: 3}
+  - {fileID: 8300000, guid: 234f7a676f8e8694f8997ca1e11762fb, type: 3}
+  - {fileID: 8300000, guid: 5c9a7e849cfd2c348a1f5c2db899efe3, type: 3}
+  - {fileID: 8300000, guid: acfdf8170ecdf66468fe52d1d1fbc2c5, type: 3}
 --- !u!82 &259597725
 AudioSource:
   m_ObjectHideFlags: 0
@@ -285,7 +291,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   spreadCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -307,7 +313,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
 --- !u!1 &495037675
 GameObject:
   m_ObjectHideFlags: 0

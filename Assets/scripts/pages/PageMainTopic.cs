@@ -26,7 +26,7 @@ public class PageMainTopic : BasePage {
     private SRGUITexture FlatTransitionTexture;
     private float FlatTransitionTime;
     private int FlatTransitionFrame;
-    private const float FlatTransitionFPS = 30;
+    private const float FlatTransitionFPS = 20;
     /*public Sprite[] FlatTransitionSeq0;
     public Sprite[] FlatTransitionSeq1;
     public Sprite[] FlatTransitionSeq2;
@@ -254,7 +254,7 @@ public class PageMainTopic : BasePage {
             FlatTransitionTime = 0;
             FlatTransitionFrame = 0;
             FlatTransitionPlaying = true;
-            SoundController.instance.playSingleSound(SoundController.SoundT.Transformation);
+            SoundController.instance.playSingleSound(SoundController.SoundT.Transformation, SelectedFlatTransition);
         }
 
         for (int i = 0; i < TopMenuItems.Count; i++) {

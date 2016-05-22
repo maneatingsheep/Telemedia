@@ -11,7 +11,7 @@ public class SoundController : MonoBehaviour {
     public AudioClip MainMenuSpin;
     public AudioClip GalleryPopUp;
     public AudioClip Checklist;
-    public AudioClip Transformation;
+    public AudioClip[] Transformations;
 
 
     public static SoundController instance;
@@ -27,7 +27,7 @@ public class SoundController : MonoBehaviour {
     }
 
 
-    public void playSingleSound(SoundT soundType) {
+    public void playSingleSound(SoundT soundType, int index = 0) {
         switch (soundType) {
             case SoundT.AppStart:
                 GetComponent<AudioSource>().PlayOneShot(AppStart);
@@ -48,7 +48,7 @@ public class SoundController : MonoBehaviour {
                 GetComponent<AudioSource>().PlayOneShot(Checklist);
                 break;
             case SoundT.Transformation:
-                GetComponent<AudioSource>().PlayOneShot(Transformation);
+                GetComponent<AudioSource>().PlayOneShot(Transformations[index]);
                 break;
 
         }
