@@ -26,7 +26,7 @@ public class PageMainTopic : BasePage {
     private SRGUITexture FlatTransitionTexture;
     private float FlatTransitionTime;
     private int FlatTransitionFrame;
-    private const float FlatTransitionFPS = 20;
+    private const float FlatTransitionFPS = 30;
     /*public Sprite[] FlatTransitionSeq0;
     public Sprite[] FlatTransitionSeq1;
     public Sprite[] FlatTransitionSeq2;
